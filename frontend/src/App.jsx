@@ -1,35 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import ErrorPage from "./pages/ErrorPage";
+import Footer from "./components/Footer/Footer";
+import Header from "./components/Header/Header";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="app">
+        <Router>
+          <Header />
+          <div className={"app-content"}>
+            <Routes>
+              <Route path="/" element={<>HOME</>} />
+              <Route path="/sign-up" element={<>needs token</>} />
+              <Route path="/sign-in" element={<>sign in</>} />
+              <Route path="/forget-password" element={<>forget password</>} />
+              {/* reuse auth */}
+              <Route path="/employees" element={<>employee profiles list</>} />
+              <Route
+                path="/employees/:id/visaHR"
+                element={<>Visa Status Management page for HR: sort & search</>}
+              />
+              <Route
+                path="/employees/:id/hiring"
+                element={
+                  <>
+                    Hiring Management page HR: generate token& review onboarding
+                    apps
+                  </>
+                }
+              />
+              {/*HR↑ Employee↓*/}
+              <Route
+                path="/employees/:id/application"
+                element={<>employee onboarding application page</>}
+              />
+              <Route path="/employees/:id" element={<>personal info page</>} />
+              <Route
+                path="/employees/:id/visa"
+                element={<>visa Status Management for employee</>}
+              />
+              <Route path="/error" element={<ErrorPage />} />
+            </Routes>
+          </div>
+          <Footer />
+        </Router>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

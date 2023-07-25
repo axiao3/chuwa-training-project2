@@ -8,7 +8,7 @@ export default function ErrorPage() {
   const navigate = useNavigate();
   const handleClick = () => {
     // navigate to home page
-    navigate("/items");
+    navigate("/");
   };
 
   return (
