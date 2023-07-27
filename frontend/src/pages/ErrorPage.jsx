@@ -27,8 +27,6 @@ export default function ErrorPage() {
             style={{
               color: "white",
               backgroundColor: "var(--var-button-color)",
-              // width: "10%",
-              // height: "3rem",
             }}
             onClick={handleClick}
           >

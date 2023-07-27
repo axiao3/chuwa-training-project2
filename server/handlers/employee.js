@@ -12,13 +12,56 @@ const findEmployeeByEmail = async function (email) {
 exports.addEmployee = async function (req, res, next) {
   try {
     let employee = await db.Employee.create(req.body);
-    return res.status(201).json(employee);
+    return res.status(200).json(employee);
   } catch (err) {
     if (err.code === 11000) {
-      // If the email is taken, send a 400 Bad Request response with a custom error message
       return res.status(400).json({ message: "This email is taken" });
     }
-    // For other errors, use the default error handling middleware
+
+    return next(err);
+  }
+};
+
+exports.getEmployeeById = async function (req, res, next) {
+  try {
+    const employeeId = req.params.id;
+    const employee = await db.Employee.findById(employeeId);
+
+    if (!employee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+    return res.status(200).json(employee);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+exports.getAllEmployees = async function (req, res, next) {
+  try {
+    const employees = await db.Employee.find();
+    return res.status(200).json(employees);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+exports.updateEmployeeById = async function (req, res, next) {
+  try {
+    const employeeId = req.params.id;
+    const updates = req.body;
+
+    const updatedEmployee = await db.Employee.findByIdAndUpdate(
+      employeeId,
+      updates,
+      { new: true }
+    );
+
+    if (!updatedEmployee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+    return res.status(200).json(updatedEmployee);
+  } catch (err) {
     return next(err);
   }
 };

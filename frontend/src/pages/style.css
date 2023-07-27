@@ -59,16 +59,40 @@
 
 /*------------------Reused Page--------------------*/
 
-/*------------------Item Page--------------------*/
-.items-page {
-  background-color: var(--var-bg-color);
-  height: 100%;
-  padding: 2rem;
+/*------------------Employee Profiles Page--------------------*/
+.employee-summary {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: box-shadow 0.3s ease;
+  width: 400px;
+  height: 200px;
+  margin: 8px;
 }
 
-/* .items-page > * {
-  margin: 1rem 3rem;
-} */
+.employee-summary img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.employee-info p {
+  margin: 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.employee-info {
+  margin-left: 10px;
+  text-align: left;
+  flex-grow: 1;
+}
 
 .title-row {
   box-sizing: border-box;
@@ -82,6 +106,44 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+@media (max-width: 800px) {
+  .employee-summary {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: auto;
+  }
+
+  .employee-picture {
+    justify-content: center;
+  }
+  .employee-summary img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 16px;
+    align-self: center;
+  }
+
+  .employee-info {
+    margin-left: 5px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+/*---------Personal Info Page----------*/
+.personal-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 /*---------paginiation----------*/

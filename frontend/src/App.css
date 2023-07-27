@@ -12,7 +12,7 @@
   filter: brightness(1);
   transition: filter 0.2s ease-in-out;
   flex: 1;
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   justify-content: center;
   background-color: var(--var-bg-color);

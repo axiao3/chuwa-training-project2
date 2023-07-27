@@ -19,7 +19,11 @@ const employeeSchema = new mongoose.Schema({
   password: { type: String, required: true },
 
   // Profile picture
-  profilePicture: { type: String, default: "default.npg" },
+  profilePicture: {
+    type: String,
+    default:
+      "https://www.testhouse.net/wp-content/uploads/2021/11/default-avatar.jpg",
+  },
 
   // Current address
   address: {
