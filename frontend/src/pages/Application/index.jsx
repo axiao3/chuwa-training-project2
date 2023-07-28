@@ -61,6 +61,9 @@ export default function Application() {
   console.log("workAuthorization: ", workAuthorization);
   console.log("driverLicense: ", driverLicense);
 
+  console.log("date : ", dateOfBirth);
+  console.log(typeof dateOfBirth);
+
   const handleImageChange = (e) => {
     e.preventDefault();
     let reader = new FileReader();

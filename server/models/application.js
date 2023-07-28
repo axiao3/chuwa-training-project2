@@ -28,12 +28,24 @@ const applicationSchema = new mongoose.Schema({
   referencePhone: { type: String },
   referenceEmail: { type: String },
   referenceRelationship: { type: String, required: true },
-  emergencyFirstName: { type: String, required: true },
-  emergencyLastName: { type: String, required: true },
-  emergencyMiddleName: { type: String },
-  emergencyPhone: { type: String },
-  emergencyEmail: { type: String },
-  emergencyRelationship: { type: String, required: true },
+  // emergencyFirstName: { type: String, required: true },
+  // emergencyLastName: { type: String, required: true },
+  // emergencyMiddleName: { type: String },
+  // emergencyPhone: { type: String },
+  // emergencyEmail: { type: String },
+  // emergencyRelationship: { type: String, required: true },
+  
+  emergencyContacts: [
+    {
+      firstName: { type: String, required: true }, //require
+      lastName: { type: String, required: true }, //require
+      middleName: { type: String },
+      phone: { type: String },
+      email: { type: String },
+      relationship: { type: String, required: true }, //require
+    },
+  ],
+  
   driverLicense: { type: String },
   workAuthorization: { type: String },
   submittedStatus: { type: String, default: "pending" },

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
-import Application from "./pages/Application/index1";
+import Application from "./pages/Application/index";
 import NotFound from "./pages/NotFound";
 import MainLayout from "./components/Layout";
 

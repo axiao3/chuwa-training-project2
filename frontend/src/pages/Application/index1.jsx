@@ -308,6 +308,23 @@ export default function Application() {
         ) : null}
       </div>
 
+      <div>
+        <label className="required" htmlFor="workphone">
+          Work Phone Number
+        </label>
+        <input
+          type="text"
+          id="workphone"
+          value={formik.values.workphone}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          required
+        />
+        {formik.touched.workphone && formik.errors.workphone ? (
+          <div>{formik.errors.workphone}</div>
+        ) : null}
+      </div>
+
       <button type="submit">Submit</button>
     </form>
   );
