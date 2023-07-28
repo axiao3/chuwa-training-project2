@@ -1,9 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-// import employeeSlice from "./employeeSlice";
+
+import userSlice from "./userSlice";
+// import errorReducer from './errorSlice';
+// import messageReducer from './messageSlice';
 
 export default configureStore({
   reducer: {
-    // employeeSlice: employeeSlice,
+    user: userSlice,
+    // error: errorReducer,
+    // messages: messageReducer
   },
   devTools: true,
 });
