@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
+import Application from "./pages/Application/index1";
 import NotFound from "./pages/NotFound";
 import MainLayout from "./components/Layout";
 
@@ -19,7 +20,7 @@ function App() {
           <Route path="/" element={<MainLayout />}>
             <Route path="/signup" element={<Register />} />
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/home" element={<>Home</>} />
+            <Route path="/application" element={<Application />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

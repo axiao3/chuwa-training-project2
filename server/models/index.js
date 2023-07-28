@@ -12,5 +12,4 @@ mongoose
 
 module.exports.User = require("./user");
 module.exports.Token = require("./token");
-// module.exports.Item = require("./item");
-// module.exports.Cart = require("./cart");
+module.exports.Application = require("./application");
