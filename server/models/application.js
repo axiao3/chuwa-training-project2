@@ -34,7 +34,6 @@ const applicationSchema = new mongoose.Schema({
   // emergencyPhone: { type: String },
   // emergencyEmail: { type: String },
   // emergencyRelationship: { type: String, required: true },
-  
   emergencyContacts: [
     {
       firstName: { type: String, required: true }, //require

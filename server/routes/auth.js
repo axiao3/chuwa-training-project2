@@ -1,7 +1,6 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 const { signup, signin, generateToken, isTokenValid } = require('../handlers/auth');
-
 
 router.post('/generateToken', generateToken);
 router.get('/token', isTokenValid);
