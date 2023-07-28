@@ -57,9 +57,11 @@
   }
 }
 
-/*------------------Reused Page--------------------*/
-
 /*------------------Employee Profiles Page--------------------*/
+.employee-container {
+  display: flex;
+  flex-direction: row;
+}
 .employee-summary {
   display: flex;
   align-items: center;
