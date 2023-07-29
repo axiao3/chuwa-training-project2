@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { getEmployeesList } from "../services/info";
+import { getAllApplications } from "../services/application";
 
 import EmployeeSummary from "./EmployeeSummary";
 
 const EmployeeProfiles = () => {
-  const [employees, setEmployees] = useState([]);
+  const [applications, setApplications] = useState([]);
 
   useEffect(() => {
-    getEmployeesList()
+    getAllApplications()
       .then((data) => {
-        setEmployees(data);
-        console.log("employees: ", data);
+        setApplications(data);
+        console.log("applications: ", data);
       })
       .catch((error) => {
         console.log(error);
@@ -20,12 +20,17 @@ const EmployeeProfiles = () => {
   return (
     <div className="employee-profiles">
       <h2>Employee Profiles</h2>
-      {employees.length === 0 ? (
-        <p>No employees found.</p>
+      {applications.length === 0 ? (
+        <p>
+          No employees found. Please check your connection and authorization.
+        </p>
       ) : (
         <div className="employee-container">
-          {employees.map((employee) => (
-            <EmployeeSummary key={employee._id} employee={employee} />
+          {applications.map((application) => (
+            <EmployeeSummary
+              key={applications.user}
+              application={application}
+            />
           ))}
         </div>
       )}
