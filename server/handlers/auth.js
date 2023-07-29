@@ -102,10 +102,11 @@ exports.signup = async function (req, res, next) {
     tokenEntry.isUsed = true;
     await tokenEntry.save();
 
-    let { id, emailReceivedLink } = user;
+    let { id, emailReceivedLink, type, applicationStatus } = user;
     token = jwt.sign({ id, email, emailReceivedLink, username, type, applicationStatus }, process.env.JWT_SECRET_KEY);
     return res.status(200).json({ id, email, emailReceivedLink, username, type, applicationStatus, token });
   } catch (err) {
+    console.log("there is error: ", err.message);
     if (err.code === 11000) {
       // console.log("Error: This email or username is taken");
       err.message = "This email or username is taken";
