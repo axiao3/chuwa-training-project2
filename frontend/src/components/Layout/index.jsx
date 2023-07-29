@@ -13,14 +13,15 @@ export default function MainLayout() {
     // const contentStyle = 
 
     return (
-          <Layout>
-            <Layout.Header >
-              <Navbar />
-            </Layout.Header>
-            <Layout.Content >
-              <Outlet />
-            </Layout.Content>
-            <Layout.Footer >this is footer</Layout.Footer>
-          </Layout>
+          // <Layout>
+          //   <Layout.Header >
+          //     <Navbar />
+          //   </Layout.Header>
+          //   <Layout.Content >
+          //     <Outlet />
+          //   </Layout.Content>
+          //   <Layout.Footer >this is footer</Layout.Footer>
+          // </Layout>
+          <p>HOME</p>
       );
 }

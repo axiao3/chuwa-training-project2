@@ -6,6 +6,7 @@ const authRoutes = require("./routes/auth");
 const applicationRoutes = require("./routes/application");
 const hiringManagementRoutes = require("./routes/hiring");
 const db = require("./models");
+const employeeRoutes = require("./routes/employeeRoutes");
 
 const PORT = 8080;
 const app = express();
@@ -13,10 +14,11 @@ const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
+app.use(cors());
 
 app.use("/auth", authRoutes);
-app.use("/application", applicationRoutes);
+app.use("/api", employeeRoutes);
+app.use("/application", applicationRoutes);;
 app.use("/hiring", hiringManagementRoutes);
 
 app.use((req, res, next) => {

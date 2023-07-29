@@ -1,14 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
 
-import userSlice from './userSlice';
+import userSlice from "./userSlice";
 // import errorReducer from './errorSlice';
-// import messageReducer from './messageSlice';
+import applicationSlice from "./applicationSlice";
 
 export default configureStore({
   reducer: {
     user: userSlice,
     // error: errorReducer,
-    // messages: messageReducer
+    applications: applicationSlice
   },
-  devTools: true
+  devTools: true,
 });
