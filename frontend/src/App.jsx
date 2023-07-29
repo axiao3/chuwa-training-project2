@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
 import Application from "./pages/Application/index";
@@ -12,8 +12,6 @@ import EmployeeProfiles from "./pages/employeeProfiles";
 import PersonalInfoPage from "./pages/PersonalInfoPage";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
       <div className="app">
@@ -21,12 +19,11 @@ function App() {
           <Header />
           <div className={"app-content"}>
             <Routes>
-              
-              <Route path="/" element={<MainLayout />}/>
-            <Route path="/signup" element={<Register />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/application" element={<Application />} />
-            <Route path="*" element={<NotFound />} />
+              <Route path="/" element={<MainLayout />} />
+              <Route path="/signup" element={<Register />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/application" element={<Application />} />
+              <Route path="*" element={<NotFound />} />
               {/* reuse auth */}
               <Route path="/employees" element={<EmployeeProfiles />} />
               <Route
@@ -43,7 +40,7 @@ function App() {
                 }
               />
               {/*HR↑ Employee↓*/}
-              
+
               <Route path="/employees/:id" element={<PersonalInfoPage />} />
               <Route
                 path="/employees/:id/visa"
