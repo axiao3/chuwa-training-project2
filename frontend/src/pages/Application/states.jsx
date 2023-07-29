@@ -11,4 +11,4 @@ const US_STATES = [
     "WA", "WV", "WI", "WY", "DC"
   ];
   
-  US_STATES
+US_STATES

@@ -3,18 +3,21 @@ const express = require("express");
 const cors = require("cors");
 const errorHandler = require("./handlers/error");
 const authRoutes = require("./routes/auth");
+const applicationRoutes = require("./routes/application");
 const db = require("./models");
 const employeeRoutes = require("./routes/employeeRoutes");
 
 const PORT = 8080;
 const app = express();
 
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 
 app.use("/auth", authRoutes);
 app.use("/api", employeeRoutes);
+app.use("/application", applicationRoutes);
 
 app.use((req, res, next) => {
   const err = new Error("Not Found");
