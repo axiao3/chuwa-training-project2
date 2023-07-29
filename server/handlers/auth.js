@@ -19,17 +19,18 @@ exports.generateToken = async function (req, res, next) {
     const token = jwt.sign(
       { email, timestamp: Date.now() },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: "3h" }
     );
     console.log("token: ", token);
 
     const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 1);
-
-    const newToken = new db.Token({ token, email, expiresAt });
-    await newToken.save();
+    expiresAt.setHours(expiresAt.getHours() + 3);
 
     const registrationLink = `http://localhost:5173/signup?token=${token}`;
+
+    const newToken = new db.Token({ token, email, expiresAt, registrationLink });
+    await newToken.save();
+    
     let mailOptions = {
       from: process.env.EMAIL_ADDRESS,
       to: email,
@@ -71,19 +72,21 @@ exports.isTokenValid = async function (req, res, next) {
 exports.signup = async function (req, res, next) {
   
   // console.log("BEFORE: token, email, username, password: ", token, email, username, password);
-  const { token } = req.body;
+  let { token } = req.body;
+  console.log("token before try: ", token);
   const tokenEntry = await db.Token.findOne({ token });
   // console.log("tokenEntry: ", tokenEntry);
   try {
+    console.log("token after try: ", token);
     let { email, username, password } = req.body;
     // console.log("AFTER: email, username, password: ", email, username, password);
-    let user = await db.User.create({ email, username, password });
+    let user = await db.User.create({ email, username, password, token });
     // console.log("user: ", user);
     tokenEntry.isUsed = true;
     await tokenEntry.save();
 
     let { id } = user;
-    let token = jwt.sign({ id, email, username }, process.env.JWT_SECRET_KEY);
+    token = jwt.sign({ id, email, username }, process.env.JWT_SECRET_KEY);
     return res.status(200).json({ id, email, username, token });
   } catch (err) {
     if (err.code === 11000) {
@@ -133,103 +136,3 @@ exports.signin = async function (req, res, next) {
     });
   }
 };
-
-// exports.generateTokenAndSendEmail = async function(req, res, next) {
-//     try {
-//       const { email } = req.body;
-
-//       // Generate a random token
-//       const token = crypto.randomBytes(20).toString('hex');
-
-//       // TODO: Store the token in a database associated with the email
-
-//       // Setup nodemailer transporter (using Gmail for this example)
-//       let transporter = nodemailer.createTransport({
-//         service: 'gmail',
-//         auth: {
-//           user: process.env.GMAIL_ADDRESS,
-//           pass: process.env.GMAIL_PASSWORD
-//         }
-//       });
-
-//       // Send email with the token
-//       const mailOptions = {
-//         from: process.env.GMAIL_ADDRESS,
-//         to: email,
-//         subject: 'Your Registration Token',
-//         text: `Your registration token is: ${token}`
-//       };
-
-//       transporter.sendMail(mailOptions, (error, info) => {
-//         if (error) {
-//           console.log(error);
-//           res.status(500).send('Error sending email');
-//         } else {
-//           console.log('Email sent: ' + info.response);
-//           res.send('Email sent successfully');
-//         }
-//       });
-//     } catch (err) {
-//       return next({
-//         status: 400,
-//         message: err.message,
-//       });
-//     }
-//   };
-
-// exports.ifEmailExist = async function (req, res, next) {
-//   try {
-//     const user = await findUserByEmail(req.body.email);
-//     if (user) {
-//       return res.status(200).json({
-//         isEmailExist: true
-//       });
-//     } else {
-//       return next({
-//         status: 400,
-//         message: "Email is not registered",
-//       });
-//     }
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
-// exports.changePassword = async function (req, res, next) {
-//   try {
-//     const user = await findUserByEmail(req.body.email);
-//     const { id, email, type } = user;
-
-//     const oldPasswordIsMatch = await user.comparePassword(req.body.previous);
-
-//     if (oldPasswordIsMatch) {
-//       const newPasswordIsMatch = await user.comparePassword(req.body.current);
-
-//       if (!newPasswordIsMatch) {
-//         user.password = req.body.current;
-//         await user.save();
-//         let token = jwt.sign({ id, email, type }, process.env.JWT_SECRET_KEY);
-//         return res.status(200).json({
-//           id,
-//           email,
-//           token,
-//         });
-//       } else {
-//         return next({
-//           status: 400,
-//           message: "New password must be different from the current one",
-//         });
-//       }
-//     } else {
-//       return next({
-//         status: 400,
-//         message: "Previous Password incorrect",
-//       });
-//     }
-//   } catch (err) {
-//     return next({
-//       status: 400,
-//       message: err.message,
-//     });
-//   }
-// };

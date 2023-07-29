@@ -7,6 +7,7 @@ import AuthForm from "../../components/AuthForm";
 import { signUpAction } from "../../app/userSlice";
 import { isTokenValid } from "../../services/auth";
 import { Loading } from "../../utils/Loading";
+import waiting from "../../utils/waiting";
 
 export default function SignUp({ token }) {
   const navigate = useNavigate();
@@ -43,8 +44,10 @@ export default function SignUp({ token }) {
     if (!emailWarning && !usernameWarning && !passwordWarning) {
       dispatch(signUpAction({ token, email, username, password })).then(action => {
         if (signUpAction.fulfilled.match(action)) {
-          alert("Sign Up Success!");
-          window.location.href = "/signin";
+          waiting(1000).then(() => {
+            // alert("Sign Up Success!");
+            window.location.href = "/signin";
+          })        
         } 
         // else if (signUpAction.rejected.match(action)) {
         //     alert("Sign Up Failed!");

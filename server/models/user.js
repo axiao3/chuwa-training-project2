@@ -21,11 +21,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: "employee"
   },
-  // registrationToken: {
-  //   type: String,
-  //   unique: true,
-  //   sparse: true  // This ensures that we can have multiple null values
-  // }
+  token: {
+    type: String,
+    unique: true,
+    // sparse: true  // This ensures that we can have multiple null values
+  }
 });
 
 userSchema.pre('save', async function (next) {

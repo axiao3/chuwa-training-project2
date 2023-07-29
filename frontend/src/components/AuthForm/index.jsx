@@ -34,7 +34,7 @@ export default function AuthForm({ type, onSubmit }) {
   };
 
   const handleUsernameBlur = () => {
-    const usernameRegex = /^[a-zA-Z0-9_]{5,15}$/;
+    const usernameRegex = /^[a-zA-Z0-9_]{5,16}$/;
     setUsernameWarning(
       !usernameRegex.test(username) ? "Invalid Username input!" : null
     );
@@ -42,7 +42,7 @@ export default function AuthForm({ type, onSubmit }) {
   };
 
   const handlePasswordBlur = () => {
-    const passwordRegex = /^(?!.*\s).{8,16}$/;
+    const passwordRegex = /^(?!.*\s).{5,16}$/;
     setPasswordWarning(
       !password || !passwordRegex.test(password)
         ? "Invalid Password input!"
@@ -53,19 +53,25 @@ export default function AuthForm({ type, onSubmit }) {
 
   const handleSubmit = (e) => {
     if (type === "Generate Token") {
-      onSubmit(e, email, emailWarning);
+      if (!emailWarning) {
+        onSubmit(e, email, emailWarning);
+      }
     } else if (type === "Sign Up") {
-      onSubmit(
-        e,
-        email,
-        username,
-        password,
-        emailWarning,
-        usernameWarning,
-        passwordWarning
-      );
+      if (!usernameWarning && !emailWarning && !passwordWarning) {
+        onSubmit(
+          e,
+          email,
+          username,
+          password,
+          emailWarning,
+          usernameWarning,
+          passwordWarning
+        );
+      }
     } else {
-      onSubmit(e, username, password);
+      if (!usernameWarning && !passwordWarning) {
+        onSubmit(e, username, password);
+      }
     }
   };
 
@@ -75,7 +81,6 @@ export default function AuthForm({ type, onSubmit }) {
 
   return (
     <form className="user-form" onSubmit={handleSubmit}>
-      
       {type !== "Sign In" ? (
         <Email
           handleEmail={handleEmail}
@@ -107,7 +112,7 @@ export default function AuthForm({ type, onSubmit }) {
 
       <button type="submit">
         {type === "Generate Token"
-          ? "Send Email"
+          ? "Generate token and send email"
           : type === "Sign Up"
           ? "Sign Up"
           : "Sign In"}

@@ -4,6 +4,7 @@ const cors = require("cors");
 const errorHandler = require("./handlers/error");
 const authRoutes = require("./routes/auth");
 const applicationRoutes = require("./routes/application");
+const hiringManagementRoutes = require("./routes/hiring");
 const db = require("./models");
 
 const PORT = 8080;
@@ -15,7 +16,8 @@ app.use(express.json());
 
 
 app.use("/auth", authRoutes);
-app.use("/application", applicationRoutes)
+app.use("/application", applicationRoutes);
+app.use("/hiring", hiringManagementRoutes);
 
 app.use((req, res, next) => {
   const err = new Error("Not Found");
