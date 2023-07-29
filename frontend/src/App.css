@@ -23,16 +23,3 @@ header {
   margin: 0;
 }
 
-footer {
-  height: 64px;
-  width: 100%;
-  padding: 0px 64px;
-  background: var(--var-primary-color);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* position: absolute;
-  bottom: 0; */
-  z-index: 999;
-  box-sizing: border-box;
-}

@@ -53,6 +53,7 @@ exports.generateToken = async function (req, res, next) {
   }
 };
 
+
 exports.isTokenValid = async function (req, res, next) {
   const { token } = req.query;
 
@@ -69,6 +70,22 @@ exports.isTokenValid = async function (req, res, next) {
   return res.status(200).json({ token });
 };
 
+
+exports.getEmailByToken = async function (req, res, next) {
+  const { token } = req.query;
+  try {
+    const tokenEntry = await db.Token.findOne({ token });
+    const email = tokenEntry.email;
+    return res.status(200).json({ email });
+  } catch (err) {
+    return next({
+      status: 400,
+      message: err.message,
+    });
+  }
+};
+
+
 exports.signup = async function (req, res, next) {
   
   // console.log("BEFORE: token, email, username, password: ", token, email, username, password);
@@ -80,14 +97,14 @@ exports.signup = async function (req, res, next) {
     console.log("token after try: ", token);
     let { email, username, password } = req.body;
     // console.log("AFTER: email, username, password: ", email, username, password);
-    let user = await db.User.create({ email, username, password, token });
+    let user = await db.User.create({ email, username, password, token, emailReceivedLink: tokenEntry.email });
     // console.log("user: ", user);
     tokenEntry.isUsed = true;
     await tokenEntry.save();
 
-    let { id } = user;
-    token = jwt.sign({ id, email, username }, process.env.JWT_SECRET_KEY);
-    return res.status(200).json({ id, email, username, token });
+    let { id, emailReceivedLink } = user;
+    token = jwt.sign({ id, email, emailReceivedLink, username, type, applicationStatus }, process.env.JWT_SECRET_KEY);
+    return res.status(200).json({ id, email, emailReceivedLink, username, type, applicationStatus, token });
   } catch (err) {
     if (err.code === 11000) {
       // console.log("Error: This email or username is taken");
@@ -101,6 +118,7 @@ exports.signup = async function (req, res, next) {
   }
 };
 
+
 exports.signin = async function (req, res, next) {
   try {
     let user = await db.User.findOne({
@@ -113,16 +131,16 @@ exports.signin = async function (req, res, next) {
         message: "Invalid Username / Password.",
       });
     }
-    let { username, email, type, id } = user;
+    let { username, email, emailReceivedLink, type, id, applicationStatus } = user;
     let isMatch = await user.comparePassword(req.body.password);
     console.log("isMatch: ", isMatch);
     if (isMatch) {
       // Generate JWT Token
       let token = jwt.sign(
-        { id, email, username, type },
+        { id, email, emailReceivedLink, username, type, applicationStatus },
         process.env.JWT_SECRET_KEY
       );
-      return res.status(200).json({ id, email, username, token, type });
+      return res.status(200).json({ id, email, emailReceivedLink, username, token, applicationStatus, type });
     } else {
       return next({
         status: 400,

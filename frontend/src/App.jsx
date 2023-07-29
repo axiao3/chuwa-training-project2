@@ -9,8 +9,10 @@ import MainLayout from "./components/Layout";
 import ErrorPage from "./pages/ErrorPage";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
+import Home from "./pages/Home";
 import EmployeeProfiles from "./pages/employeeProfiles";
 import PersonalInfoPage from "./pages/PersonalInfoPage";
+import HiringManagement from "./pages/HiringManagement";
 
 function App() {
   return (
@@ -20,7 +22,7 @@ function App() {
           <div className="app-content">
             <Routes>
               <Route path="/" element={<MainLayout />} />
-              <Route path="/home" element={<div>Home</div>} />
+              <Route path="/home" element={<Home />} />
               <Route path="/signup" element={<Register />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/application" element={<Application />} />
@@ -31,10 +33,7 @@ function App() {
                 path="/employees/:id/visaHR"
                 element={<>Visa Status Management page for HR: sort & search</>}
               />
-              <Route
-                path="/employees/:id/hiring"
-                element={<>Hiring Management page</>}
-              />
+              <Route path="/employees/:id/hiring" element={<HiringManagement />} />
               {/*HR↑ Employee↓*/}
 
               <Route path="/employees/:id" element={<PersonalInfoPage />} />

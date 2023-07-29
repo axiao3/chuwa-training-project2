@@ -19,6 +19,20 @@ export default function Application() {
     }
   }, [isAuthenticated, navigate]);
 
+  // useEffect(() => {
+  //   const fetchEmailByToken = async () => {
+  //     try {
+  //       const response = await isTokenValid(token);
+  //       setTokenResponse(response);
+  //     } catch (err) {
+  //       setTokenError(err.message);
+  //     } finally {
+  //       setIsLoading(false); // set loading to false regardless of success or error
+  //     }
+  //   };
+  //   fetchTokenValidity();
+  // }, [token]); 
+
   const initialEmergencyContact = {
     firstName: "",
     lastName: "",
@@ -41,7 +55,7 @@ export default function Application() {
     zip: "",
     cellphone: "",
     workphone: "",
-    email: "xli199911@gmail.com",
+    email: user.emailReceivedLink,
     SSN: "",
     driverLicense: "",
     dateOfBirth: "",

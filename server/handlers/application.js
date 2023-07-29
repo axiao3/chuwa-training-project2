@@ -5,6 +5,11 @@ exports.createApplication = async function (req, res, next) {
   try {
     console.log("data: ", req.body);
     const item = await Application.create(req.body);
+
+    const foundUser = await db.User.findById(req.body.user);
+    foundUser.applicationStatus = "pending";
+    await foundUser.save();
+
     return res.status(200).json(item);
   } catch (err) {
     console.log("error: ", err);

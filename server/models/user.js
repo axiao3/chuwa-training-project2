@@ -7,6 +7,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  emailReceivedLink: {
+    type: String,
+    required: true,
+  },
   username: {
     type: String,
     required: true,
@@ -25,6 +29,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     // sparse: true  // This ensures that we can have multiple null values
+  },
+  applicationStatus: {
+    type: String,
+    default: "never submitted"
   }
 });
 

@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 //import { getOneEmployee, updateEmployee } from "../services/info";
 import EditPersonalInfo from "./EditPersonalInfo";
 
@@ -12,10 +12,28 @@ import {
 } from "../services/application";
 
 const PersonalInfoPage = () => {
-  const { user } = useSelector((state) => state.user);
-  console.log("user in the redux: ", user);
-
   const { id } = useParams();
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+  console.log("user in the redux: ", user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/signin", { state: { from: `/employees/${id}` } });
+    } else {
+      if (user.applicationStatus !== "approved") {
+        window.location.href = "/application";
+      }
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   if (user.applicationStatus !== "approved") {
+  //     window.location.href = "/application";
+  //   }
+  // }, [user]);
+
+  
   let isMatch = id === user.id;
   console.log("isMatch: ", isMatch, id, user.id);
   const defaultImgUrl =

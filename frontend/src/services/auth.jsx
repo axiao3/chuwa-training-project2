@@ -69,12 +69,15 @@ export function signIn(username, password) {
         password: password,
       })
       .then((response) => {
+        console.log("response.data: ", response.data);
         resolve({
+          id: response.data.id,
           email: response.data.email,
           username: response.data.username,
           token: response.data.token,
           type: response.data.type,
-          id: response.data.id,
+          emailReceivedLink: response.data.emailReceivedLink,
+          applicationStatus: response.data.applicationStatus,
         });
       })
       .catch((err) => {

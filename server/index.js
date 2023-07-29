@@ -6,7 +6,7 @@ const authRoutes = require("./routes/auth");
 const applicationRoutes = require("./routes/application");
 const hiringManagementRoutes = require("./routes/hiring");
 const db = require("./models");
-const employeeRoutes = require("./routes/employeeRoutes");
+// const employeeRoutes = require("./routes/employeeRoutes");
 
 const PORT = 8080;
 const app = express();
@@ -17,7 +17,6 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/auth", authRoutes);
-app.use("/api", employeeRoutes);
 app.use("/application", applicationRoutes);;
 app.use("/hiring", hiringManagementRoutes);
 

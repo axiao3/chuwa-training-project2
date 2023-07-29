@@ -11,7 +11,8 @@ const { ensureManager } = require("../middleware/ensureManager");
 
 router.post("/", ensureCorrectUser, createApplication);
 router.get("/", ensureManager, getAllApplications);
-router.get("/:id", ensureManager, getApplicationById);
+// router.get("/:id", ensureManager, getApplicationById);
+router.get("/:id", getApplicationById);
 router.put("/:id", ensureCorrectUser, updateApplicationById);
 //manager edit application
 
