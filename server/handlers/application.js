@@ -1,9 +1,20 @@
+const AWS = require('aws-sdk');
 const Application = require("../models/application");
 const db = require("../models");
 
 exports.createApplication = async function (req, res, next) {
   try {
     console.log("data: ", req.body);
+
+    const { workAuthorization, profilePicture, driverLicense } = req.body
+    const profilePictureUrl = await uploadToS3(profilePicture);  
+    const workAuthorizationUrl = await uploadToS3(workAuthorization);  
+    const driverLicenseUrl = await uploadToS3(driverLicense);  
+
+    req.body.profilePicture = profilePictureUrl;
+    req.body.workAuthorization = workAuthorizationUrl;
+    req.body.driverLicense = driverLicenseUrl;
+
     const item = await Application.create(req.body);
 
     const foundUser = await db.User.findById(req.body.user);
@@ -63,4 +74,43 @@ exports.updateApplicationById = async function (req, res, next) {
   } catch (err) {
     return next(err);
   }
+};
+
+// exports.uploadFile = async (req, res) => {
+//   try {
+//     const application = new Application({
+//       imageUrl: req.files["image"][0].location,
+//       uploadedFile: req.files["pdf"][0].location,
+//     });
+//     await application.save();
+//     res.json({ message: "Upload successful", application });
+//   } catch (err) {
+//     res.status(500).send(err);
+//   }
+// };
+
+const uploadToS3 = (base64Data) => {
+    const s3 = new AWS.S3({
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        region: 'us-east-1'  // Replace 'your-region' with your AWS region, e.g., 'us-west-1'
+    });
+
+    const buffer = Buffer.from(base64Data.split(",")[1], 'base64');
+    const mimeType = base64Data.split(";")[0].split(":")[1];  // Extracts MIME type from "data:{MIME};base64"
+
+    const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: `${Date.now()}-${Math.round(Math.random() * 1E9)}`,  // Generate a unique filename
+        Body: buffer,
+        ContentType: mimeType,
+        ContentEncoding: 'base64'
+    };
+    
+    return new Promise((resolve, reject) => {
+        s3.upload(params, (err, data) => {
+            if (err) reject(err);
+            resolve(data.Location);
+        });
+    });
 };

@@ -154,7 +154,7 @@ export default function Application() {
     dispatch(createApplicationAction(values)).then((action) => {
       if (createApplicationAction.fulfilled.match(action)) {
         alert("Submit Success!");
-        navigate("/home");
+        // navigate("/home");
       }
     });
   };
@@ -166,33 +166,44 @@ export default function Application() {
       onSubmit={onSubmit}
     >
       {(formik) => {
-        const handleImageChange = (e) => {
+
+        const convertToBase64 = (file) => {
+          return new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = (error) => reject(error);
+          });
+        };
+
+        const handleImageChange = async (e) => {
           e.preventDefault();
           let file = e.target.files[0];
+          const base64 = await convertToBase64(file);
           if (file) {
             formik.setFieldValue("profilePictureName", file.name);
-            formik.setFieldValue("profilePicture", URL.createObjectURL(file));
+            formik.setFieldValue("profilePicture", base64);
+            // formik.setFieldValue("profilePicture", URL.createObjectURL(file));
           }
         };
 
-        const handleDriverLicenseChange = (e) => {
+        const handleDriverLicenseChange = async (e) => {
           e.preventDefault();
           let file = e.target.files[0];
+          const base64 = await convertToBase64(file);
           if (file) {
             formik.setFieldValue("driverLicenseName", file.name);
-            formik.setFieldValue("driverLicense", URL.createObjectURL(file));
+            formik.setFieldValue("driverLicense", base64);
           }
         };
 
-        const handleWorkAuthorizationChange = (e) => {
+        const handleWorkAuthorizationChange = async (e) => {
           e.preventDefault();
           let file = e.target.files[0];
+          const base64 = await convertToBase64(file);
           if (file) {
             formik.setFieldValue("workAuthorizationName", file.name);
-            formik.setFieldValue(
-              "workAuthorization",
-              URL.createObjectURL(file)
-            );
+            formik.setFieldValue("workAuthorization",base64);
           }
         };
 
