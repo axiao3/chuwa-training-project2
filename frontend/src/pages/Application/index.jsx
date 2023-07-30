@@ -20,15 +20,21 @@ export default function Application() {
     if (!isAuthenticated) {
       navigate("/signin", { state: { from: "/application" } });
     } else {
-      if (user.applicationStatus === "pending") {
+      if (user.applicationStatus !== "never submitted") {
         getApplicationById(user.id).then((data) => {
-          setApplicationData(data);     //set state is async
-          // console.log("applicationData 1: ", applicationData); 
+          console.log("data: ", data);
+          setApplicationData(data);
         });
       }
-      if (user.applicationStatus === "rejected") {
-        getApplicationById(user.id).then((data) => setApplicationData(data));
-      }
+      //   if (user.applicationStatus === "pending") {
+      //     getApplicationById(user.id).then((data) => {
+      //       setApplicationData(data);     //set state is async
+      //       // console.log("applicationData 1: ", applicationData);
+      //     });
+      //   }
+      //   if (user.applicationStatus === "rejected") {
+      //     getApplicationById(user.id).then((data) => setApplicationData(data));
+      //   }
     }
   }, [isAuthenticated, navigate]);
 
@@ -38,7 +44,7 @@ export default function Application() {
 
   return (
     <>
-      {applicationData && (
+      {user.applicationStatus !== "never submitted" && applicationData ? (
         <ApplicationForm
           status={user.applicationStatus}
           firstName={applicationData.firstName}
@@ -74,8 +80,9 @@ export default function Application() {
           driverLicenseName={applicationData.driverLicenseName}
           workAuthorizationName={applicationData.workAuthorizationName}
         />
-      )}
+      ) : user.applicationStatus === "never submitted" ? (
+        <ApplicationForm status={user.applicationStatus} />
+      ) : null}
     </>
-
   );
 }

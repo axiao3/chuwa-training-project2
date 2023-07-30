@@ -7,6 +7,7 @@ import {
   logOut,
   generateToken,
   isTokenValid,
+  getUserById
 } from "../services/auth";
 
 const initialState = {
@@ -59,6 +60,25 @@ export const signInAction = createAsyncThunk(
 
       // thunkAPI.dispatch(removeError());
       console.log("sign in in user slice: ", user);
+      return user;
+    } catch (error) {
+      const { message } = error;
+      // thunkAPI.dispatch(addError(message));
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getUserByIdAction = createAsyncThunk(
+  "user/getUserById",
+  async (data, thunkAPI) => {
+    try {
+      const { id } = data;
+      const user = await getUserById(id);
+
+      if (user.username && user.token) localStorage.setItem("token", user.token);
+
+      console.log("get user in user slice: ", user);
       return user;
     } catch (error) {
       const { message } = error;
@@ -124,6 +144,19 @@ const userSlice = createSlice({
     });
     builder.addCase(signInAction.pending, (state, action) => {
       state.status = "Sign in pending";
+    });
+    builder.addCase(getUserByIdAction.fulfilled, (state, action) => {
+      state.isAuthenticated = !!Object.keys(action.payload).length;
+      state.user = action.payload;
+      state.status = "get user succeeded";
+    });
+    builder.addCase(getUserByIdAction.rejected, (state, action) => {
+      state.isAuthenticated = false;
+      state.user = {};
+      state.status = action.payload;
+    });
+    builder.addCase(getUserByIdAction.pending, (state, action) => {
+      state.status = "get user pending";
     });
   },
 });

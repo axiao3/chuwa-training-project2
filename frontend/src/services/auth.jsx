@@ -86,6 +86,25 @@ export function signIn(username, password) {
   });
 }
 
+export function getUserById(id) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${apiUrl}/${id}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        console.log("response.data in service: ", response.data);
+        resolve(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+}
+
 export function logOut(key, value) {
   if (key) {
     //if there is such a user signed in, log it out

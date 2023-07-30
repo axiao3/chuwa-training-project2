@@ -56,6 +56,16 @@ exports.getAllApplications = async function (req, res, next) {
 
 exports.updateApplicationById = async function (req, res, next) {
   try {
+    const { workAuthorization, profilePicture, driverLicense } = req.body
+    const profilePictureUrl = await uploadToS3(profilePicture);  
+    const workAuthorizationUrl = await uploadToS3(workAuthorization);  
+    const driverLicenseUrl = await uploadToS3(driverLicense);  
+
+    req.body.profilePicture = profilePictureUrl;
+    req.body.workAuthorization = workAuthorizationUrl;
+    req.body.driverLicense = driverLicenseUrl;
+    req.body.submittedStatus = "pending";
+
     const employeeId = req.params.id;
     const updates = req.body;
 
@@ -65,14 +75,18 @@ exports.updateApplicationById = async function (req, res, next) {
       { new: true }
     );
 
-    if (!updatedApplication) {
-      return res
-        .status(404)
-        .json({ message: "Employee Application not found" });
-    }
+    const foundUser = await db.User.findById(employeeId);
+    foundUser.applicationStatus = "pending";
+    await foundUser.save();
 
+    // if (!updatedApplication) {
+    //   return res
+    //     .status(404)
+    //     .json({ message: "Employee Application not found" });
+    // }
     return res.status(200).json(updatedApplication);
   } catch (err) {
+    console.log("error: ", err);
     return next(err);
   }
 };

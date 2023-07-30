@@ -20,6 +20,24 @@ export function createApplication(data) {
   });
 }
 
+export function updateApplicationById(id, data) {
+  return new Promise((resolve, reject) => {
+    axios
+      .put(`${apiUrl}/${id}`, data, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+}
+
 export function getAllApplications() {
   return new Promise((resolve, reject) => {
     axios
@@ -57,20 +75,4 @@ export function getApplicationById(id) {
   });
 }
 
-export function updateApplicationById(id, data) {
-  return new Promise((resolve, reject) => {
-    axios
-      .put(`${apiUrl}/${id}`, data, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      })
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        reject(err);
-      });
-  });
-}
+

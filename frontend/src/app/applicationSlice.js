@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createApplication } from "../services/application";
+import { createApplication, updateApplicationById } from "../services/application";
 // import { removeError, addError } from "./errorSlice";
 
 const initialState = {
@@ -8,26 +8,26 @@ const initialState = {
   status: "idle",
 };
 
-// export const fetchApplicationAction = createAsyncThunk(
-//     "application/fetchApplication",
-//     async (data, thunkAPI) => {
-//       try {
-//         const messages = await fetchMessages(data);
-//         thunkAPI.dispatch(removeError());
-//         return messages;
-//       } catch (error) {
-//         const { message } = error;
-//         thunkAPI.dispatch(addError(message));
-//         return thunkAPI.rejectWithValue(message);
-//       }
-//     }
-//   );
-
 export const createApplicationAction = createAsyncThunk(
   "application/createApplication",
   async (data, thunkAPI) => {
     try {
       const application = await createApplication(data);
+      return application;
+    } catch (error) {
+      const { message } = error;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateApplicationAction = createAsyncThunk(
+  "application/updateApplication",
+  async (data, thunkAPI) => {
+    try {
+      console.log("id: ", data.user);
+      console.log("data: ", data);
+      const application = await updateApplicationById(data.user, data);
       return application;
     } catch (error) {
       const { message } = error;
@@ -55,6 +55,16 @@ const applicationSlice = createSlice({
     });
     builder.addCase(createApplicationAction.pending, (state, action) => {
       state.status = "create application pending";
+    });
+    builder.addCase(updateApplicationAction.fulfilled, (state, action) => {
+      state.status = "update application succeeded";
+      state.applications.push(action.payload);
+    });
+    builder.addCase(updateApplicationAction.rejected, (state, action) => {
+      state.status = "update application failed";
+    });
+    builder.addCase(updateApplicationAction.pending, (state, action) => {
+      state.status = "update application pending";
     });
   },
 });

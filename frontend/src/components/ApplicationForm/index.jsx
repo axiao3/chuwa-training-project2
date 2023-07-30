@@ -6,8 +6,12 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as yup from "yup";
 import defaultProfileImage from "../../assets/default_profile.jpg";
-// import "./style.css";
-import { createApplicationAction } from "../../app/applicationSlice";
+import style from "./style.module.css";
+import {
+  createApplicationAction,
+  updateApplicationAction,
+} from "../../app/applicationSlice";
+import { getUserByIdAction } from "../../app/userSlice";
 import CustomField from "./CustomField";
 
 export default function ApplicationForm(props) {
@@ -67,16 +71,56 @@ export default function ApplicationForm(props) {
   };
 
   const US_STATES = [
-    "AL", "AK", "AZ", "AR", "CA", 
-    "CT", "DE", "FL", "GA", "HI", 
-    "ID", "IL", "IN", "IA", "KS", 
-    "KY", "LA", "ME", "MD", "MA", 
-    "MI", "MN", "MS", "MO", "MT", 
-    "NE", "NV", "NH", "NJ", "NM",
-    "NY", "NC", "ND", "OH", "OK", 
-    "OR", "PA", "RI", "SC", "SD", 
-    "TN", "TX", "UT", "VT", "VA", 
-    "WA", "WV", "WI", "WY", "DC"
+    "AL",
+    "AK",
+    "AZ",
+    "AR",
+    "CA",
+    "CT",
+    "DE",
+    "FL",
+    "GA",
+    "HI",
+    "ID",
+    "IL",
+    "IN",
+    "IA",
+    "KS",
+    "KY",
+    "LA",
+    "ME",
+    "MD",
+    "MA",
+    "MI",
+    "MN",
+    "MS",
+    "MO",
+    "MT",
+    "NE",
+    "NV",
+    "NH",
+    "NJ",
+    "NM",
+    "NY",
+    "NC",
+    "ND",
+    "OH",
+    "OK",
+    "OR",
+    "PA",
+    "RI",
+    "SC",
+    "SD",
+    "TN",
+    "TX",
+    "UT",
+    "VT",
+    "VA",
+    "WA",
+    "WV",
+    "WI",
+    "WY",
+    "DC",
   ];
 
   const cellphoneRegex =
@@ -138,12 +182,29 @@ export default function ApplicationForm(props) {
     // alert(values);
     values.user = user.id;
     console.log("values:", values);
-    dispatch(createApplicationAction(values)).then((action) => {
-      if (createApplicationAction.fulfilled.match(action)) {
-        alert("Submit Success!");
-        // navigate("/home");
-      }
-    });
+    if (props.status === "never submitted") {
+      dispatch(createApplicationAction(values)).then((action) => {
+        if (createApplicationAction.fulfilled.match(action)) {
+          dispatch(getUserByIdAction({ id: user.id })).then((action) => {
+            if (getUserByIdAction.fulfilled.match(action)) {
+              alert("Submit Success!");
+              navigate("/home");
+            }
+          });
+        }
+      });
+    } else if (props.status === "rejected") {
+      dispatch(updateApplicationAction(values)).then((action) => {
+        if (updateApplicationAction.fulfilled.match(action)) {
+          dispatch(getUserByIdAction({ id: user.id })).then((action) => {
+            if (getUserByIdAction.fulfilled.match(action)) {
+              alert("Update Success!");
+              navigate("/home");
+            }
+          });
+        }
+      });
+    }
   };
 
   return (
@@ -163,39 +224,51 @@ export default function ApplicationForm(props) {
         };
 
         const handleImageChange = async (e) => {
-          e.preventDefault();
           let file = e.target.files[0];
-          const base64 = await convertToBase64(file);
           if (file) {
+            e.preventDefault();
+            const base64 = await convertToBase64(file);
             formik.setFieldValue("profilePictureName", file.name);
             formik.setFieldValue("profilePicture", base64);
             // formik.setFieldValue("profilePicture", URL.createObjectURL(file));
+          } else {
+            // If no file was selected, reset the values
+            formik.setFieldValue("profilePictureName", "");
+            formik.setFieldValue("profilePicture", "");
           }
         };
 
         const handleDriverLicenseChange = async (e) => {
-          e.preventDefault();
           let file = e.target.files[0];
-          const base64 = await convertToBase64(file);
           if (file) {
+            e.preventDefault();
+            const base64 = await convertToBase64(file);
             formik.setFieldValue("driverLicenseName", file.name);
             formik.setFieldValue("driverLicense", base64);
+          } else {
+            // If no file was selected, reset the values
+            formik.setFieldValue("driverLicenseName", "");
+            formik.setFieldValue("driverLicense", "");
           }
         };
 
         const handleWorkAuthorizationChange = async (e) => {
-          e.preventDefault();
           let file = e.target.files[0];
-          const base64 = await convertToBase64(file);
           if (file) {
+            e.preventDefault();
+            const base64 = await convertToBase64(file);
             formik.setFieldValue("workAuthorizationName", file.name);
             formik.setFieldValue("workAuthorization", base64);
+          } else {
+            // If no file was selected, reset the values
+            formik.setFieldValue("profilePictureName", "");
+            formik.setFieldValue("profilePicture", "");
           }
         };
 
         return (
           <Form>
-            <h2 style={{color: "red"}}>Status: {props.status}</h2>
+            <h2 style={{ color: "red" }}>Status: {props.status}</h2>
             <p>
               <span className="asterisk">*</span> stands for required field
             </p>
@@ -238,7 +311,7 @@ export default function ApplicationForm(props) {
               label="First Name:"
               required={true}
               name="firstName"
-              textContent={props.firstName}
+              type="text"
             />
 
             <CustomField
@@ -246,7 +319,7 @@ export default function ApplicationForm(props) {
               label="Last Name:"
               required={true}
               name="lastName"
-              textContent={props.lastName}
+              type="text"
             />
 
             <CustomField
@@ -254,7 +327,7 @@ export default function ApplicationForm(props) {
               label="Middle Name:"
               required={false}
               name="middleName"
-              textContent={props.middleName}
+              type="text"
             />
 
             <CustomField
@@ -262,7 +335,7 @@ export default function ApplicationForm(props) {
               label="Preferred Name:"
               required={false}
               name="preferredName"
-              textContent={props.preferredName}
+              type="text"
             />
 
             <CustomField
@@ -270,7 +343,7 @@ export default function ApplicationForm(props) {
               label="Street Name:"
               required={true}
               name="streetName"
-              textContent={props.streetName}
+              type="text"
             />
 
             <CustomField
@@ -278,7 +351,7 @@ export default function ApplicationForm(props) {
               label="building/apt #:"
               required={true}
               name="apt"
-              textContent={props.apt}
+              type="text"
             />
 
             <CustomField
@@ -286,23 +359,40 @@ export default function ApplicationForm(props) {
               label="city:"
               required={true}
               name="city"
-              textContent={props.city}
+              type="text"
             />
 
-            <CustomField
-              status={props.status}
-              label="State:"
-              required={true}
-              name="state"
-              textContent={props.state}
-            />
+            <div>
+              <label className="required" htmlFor="state">
+                State
+              </label>
+              {props.status !== "pending" ? (
+                <>
+                  <Field as="select" id="state" name="state">
+                    <option value="">Select</option>
+                    {US_STATES.map((state) => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </Field>
+                  <ErrorMessage
+                    component="span"
+                    className="errorMessage"
+                    name="state"
+                  />
+                </>
+              ) : (
+                <Field type="text" id="state" name="state" disabled />
+              )}
+            </div>
 
             <CustomField
               status={props.status}
               label="zip:"
               required={true}
               name="zip"
-              textContent={props.zip}
+              type="text"
             />
 
             <CustomField
@@ -310,7 +400,7 @@ export default function ApplicationForm(props) {
               label="Cell Phone Number:"
               required={true}
               name="cellphone"
-              textContent={props.cellphone}
+              type="text"
             />
 
             <CustomField
@@ -318,7 +408,7 @@ export default function ApplicationForm(props) {
               label="Work Phone Number:"
               required={false}
               name="workphone"
-              textContent={props.workphone}
+              type="text"
             />
 
             <CustomField
@@ -326,45 +416,48 @@ export default function ApplicationForm(props) {
               label="SSN:"
               required={true}
               name="SSN"
-              textContent={props.SSN}
+              type="text"
             />
 
-            {props.status !== "pending" && (
-              <div>
-                <label htmlFor="driver_license">Upload Driver License:</label>
+            <div>
+              <label htmlFor="driver_license ">Upload Driver License:</label>
+              {props.status !== "pending" && (
                 <Field
+                  id="driver_license"
                   name="driver_license" // different from driverLicense
                   type="file"
                   onChange={handleDriverLicenseChange}
                   // accept=".pdf"
                 />
-              </div>
-            )}
-
-            <div>
-              <label className="required" htmlFor="dateOfBirth">
-                date of birth:
-              </label>
-              {props.status !== "pending" ? (
-                <>
-                  <Field type="date" id="dateOfBirth" name="dateOfBirth" />
-                  <ErrorMessage
-                    component="span"
-                    className="errorMessage"
-                    name="dateOfBirth"
-                  />
-                </>
-              ) : (
-                <span>{props.dateOfBirth}</span>
               )}
+              {formik.values.driverLicenseName ? (
+                <a
+                  href={formik.values.driverLicense}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: "none" }}
+                >
+                  <button type="button">
+                    {formik.values.driverLicenseName}
+                  </button>
+                </a>
+              ) : null}
             </div>
 
+            <CustomField
+              status={props.status}
+              label="date of birth:"
+              required={true}
+              name="dateOfBirth"
+              type="date"
+            />
+
             <div>
-              <label className="required" htmlFor="gender">
-                gender:
-              </label>
               {props.status !== "pending" ? (
                 <>
+                  <label className="required" htmlFor="gender">
+                    gender:
+                  </label>
                   <Field as="select" id="gender" name="gender">
                     <option value="">Select</option>
                     <option value="male">male</option>
@@ -380,7 +473,13 @@ export default function ApplicationForm(props) {
                   />
                 </>
               ) : (
-                <span>{props.gender}</span>
+                <CustomField
+                  status={props.status}
+                  label="gender:"
+                  type="select"
+                  name="gender"
+                  required={true}
+                />
               )}
             </div>
 
@@ -402,7 +501,12 @@ export default function ApplicationForm(props) {
                   />
                 </>
               ) : (
-                <span>{props.residentStatus}</span>
+                <Field
+                  type="select"
+                  id="residentStatus"
+                  name="residentStatus"
+                  disabled
+                />
               )}
             </div>
 
@@ -429,7 +533,12 @@ export default function ApplicationForm(props) {
                     />
                   </>
                 ) : (
-                  <span>{props.authorizationType}</span>
+                  <Field
+                    type="select"
+                    id="authorizationType_GC"
+                    name="authorizationType"
+                    disabled
+                  />
                 )}
               </div>
             )}
@@ -444,7 +553,7 @@ export default function ApplicationForm(props) {
                     <Field
                       as="select"
                       name="authorizationType"
-                      id="authorizationType"
+                      id="authorizationType_OPT"
                     >
                       <option value="">Select work authorization</option>
                       <option value="H1-B">H1-B</option>
@@ -460,7 +569,12 @@ export default function ApplicationForm(props) {
                     />
                   </>
                 ) : (
-                  <span>{props.authorizationType}</span>
+                  <Field
+                    type="select"
+                    id="authorizationType_OPT"
+                    name="authorizationType"
+                    disabled
+                  />
                 )}
 
                 {formik.values.authorizationType === "F1(CPT/OPT)" && (
@@ -468,7 +582,7 @@ export default function ApplicationForm(props) {
                     <label className="required" htmlFor="F1">
                       Upload OPT Receipt:
                     </label>
-                    {props.status !== "pending" ? (
+                    {props.status !== "pending" && (
                       <>
                         <Field
                           name="work_authorization"
@@ -483,9 +597,19 @@ export default function ApplicationForm(props) {
                           name="workAuthorization"
                         />
                       </>
-                    ) : (
-                      <span>{props.workAuthorization}</span>
                     )}
+                    {formik.values.workAuthorizationName ? (
+                      <a
+                        href={formik.values.workAuthorization}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <button type="button">
+                          {formik.values.workAuthorizationName}
+                        </button>
+                      </a>
+                    ) : null}
                   </div>
                 )}
 
@@ -509,30 +633,28 @@ export default function ApplicationForm(props) {
                         />
                       </>
                     ) : (
-                      <span>{props.otherVisaTitle}</span>
+                      <Field id="otherVisaTitle" name="otherVisaTitle" type="text" disabled/>
                     )}
                   </div>
                 )}
               </div>
             )}
 
-            <div>
-              <label htmlFor="startDate">Start Date:</label>
-              {props.status !== "pending" ? (
-                <Field type="date" id="startDate" name="startDate" />
-              ) : (
-                <span>{props.startDate}</span>
-              )}
-            </div>
+            <CustomField
+              status={props.status}
+              label="Start Date:"
+              required={false}
+              name="startDate"
+              type="date"
+            />
 
-            <div>
-              <label htmlFor="endDate">End Date:</label>
-              {props.status !== "pending" ? (
-                <Field type="date" id="endDate" name="endDate" />
-              ) : (
-                <span>{props.endDate}</span>
-              )}
-            </div>
+            <CustomField
+              status={props.status}
+              label="End Date:"
+              required={false}
+              name="endDate"
+              type="date"
+            />
 
             <p>Reference</p>
             <CustomField
@@ -540,7 +662,7 @@ export default function ApplicationForm(props) {
               label="First Name:"
               required={true}
               name="referenceFirstName"
-              textContent={props.referenceFirstName}
+              type="text"
             />
 
             <CustomField
@@ -548,7 +670,7 @@ export default function ApplicationForm(props) {
               label="Last Name:"
               required={true}
               name="referenceLastName"
-              textContent={props.referenceLastName}
+              type="text"
             />
 
             <CustomField
@@ -556,7 +678,7 @@ export default function ApplicationForm(props) {
               label="Middle Name:"
               required={false}
               name="referenceMiddleName"
-              textContent={props.referenceMiddleName}
+              type="text"
             />
 
             <CustomField
@@ -564,7 +686,7 @@ export default function ApplicationForm(props) {
               label="Phone:"
               required={false}
               name="referencePhone"
-              textContent={props.referencePhone}
+              type="text"
             />
 
             <CustomField
@@ -572,7 +694,7 @@ export default function ApplicationForm(props) {
               label="Email:"
               required={false}
               name="referenceEmail"
-              textContent={props.referenceEmail}
+              type="text"
             />
 
             <CustomField
@@ -580,7 +702,7 @@ export default function ApplicationForm(props) {
               label="Relationship:"
               required={true}
               name="referenceRelationship"
-              textContent={props.referenceRelationship}
+              type="text"
             />
 
             <p>Emergency Contacts</p>
@@ -592,6 +714,7 @@ export default function ApplicationForm(props) {
                     {formik.values.emergencyContacts.length > 0 &&
                       formik.values.emergencyContacts.map((contact, index) => (
                         <div key={index}>
+                          <div>{`Emergency Contact ${index + 1}`}</div>
                           <div>
                             <label className="required">First Name:</label>
                             <Field
@@ -664,36 +787,40 @@ export default function ApplicationForm(props) {
                 )}
               </FieldArray>
             ) : (
-              props.emergencyContacts.map((oneEmergencyObject, index) => {
-                return (
-                  <div key={index}>
-                    <div>
-                      <label>First Name:</label>
-                      <span>{oneEmergencyObject.firstName}</span>
+              formik.values.emergencyContacts.map(
+                (oneEmergencyObject, index) => {
+                  return (
+                    <div key={index}>
+                      <div>{`Emergency Contact ${index + 1}`}</div>
+                      <div>
+                        <label>First Name:</label>
+                        <input value={oneEmergencyObject.firstName} disabled/>
+                      </div>
+                      <div>
+                        <label>Last Name:</label>
+                        <input value={oneEmergencyObject.lastName} disabled/>
+                      </div>
+                      <div>
+                        <label>Middle Name:</label>
+                        <input value={oneEmergencyObject.middleName} disabled/>
+                      </div>
+                      <div>
+                        <label>phone:</label>
+                        <input value={oneEmergencyObject.phone} disabled/>
+                      </div>
+                      <div>
+                        <label>email:</label>
+                        <input value={oneEmergencyObject.email} disabled/>
+                      </div>
+                      <div>
+                        <label>relationship:</label>
+                        <input value={oneEmergencyObject.relationship} disabled/>
+                      </div>
+                      <br></br>
                     </div>
-                    <div>
-                      <label>Last Name:</label>
-                      <span>{oneEmergencyObject.lastName}</span>
-                    </div>
-                    <div>
-                      <label>Middle Name:</label>
-                      <span>{oneEmergencyObject.middleName}</span>
-                    </div>
-                    <div>
-                      <label>phone:</label>
-                      <span>{oneEmergencyObject.phone}</span>
-                    </div>
-                    <div>
-                      <label>email:</label>
-                      <span>{oneEmergencyObject.email}</span>
-                    </div>
-                    <div>
-                      <label>relationship:</label>
-                      <span>{oneEmergencyObject.relationship}</span>
-                    </div>
-                  </div>
-                );
-              })
+                  );
+                }
+              )
             )}
 
             <p>Uploaded Summary</p>
@@ -707,7 +834,9 @@ export default function ApplicationForm(props) {
                     rel="noopener noreferrer"
                     style={{ textDecoration: "none" }}
                   >
-                    <button>{formik.values.profilePictureName}</button>
+                    <button type="button">
+                      {formik.values.profilePictureName}
+                    </button>
                   </a>
                 </div>
               ) : null}
@@ -721,7 +850,9 @@ export default function ApplicationForm(props) {
                     rel="noopener noreferrer"
                     style={{ textDecoration: "none" }}
                   >
-                    <button>{formik.values.driverLicenseName}</button>
+                    <button type="button">
+                      {formik.values.driverLicenseName}
+                    </button>
                   </a>
                 </div>
               ) : null}
@@ -735,14 +866,17 @@ export default function ApplicationForm(props) {
                     rel="noopener noreferrer"
                     style={{ textDecoration: "none" }}
                   >
-                    <button>{formik.values.workAuthorizationName}</button>
+                    <button type="button">
+                      {formik.values.workAuthorizationName}
+                    </button>
                   </a>
                 </div>
               ) : null}
             </div>
 
-            {props.status !== "pending" && <button type="submit">Submit</button>}
-            
+            {props.status !== "pending" && (
+              <button type="submit">Submit</button>
+            )}
           </Form>
         );
       }}

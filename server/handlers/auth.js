@@ -71,19 +71,19 @@ exports.isTokenValid = async function (req, res, next) {
 };
 
 
-exports.getEmailByToken = async function (req, res, next) {
-  const { token } = req.query;
-  try {
-    const tokenEntry = await db.Token.findOne({ token });
-    const email = tokenEntry.email;
-    return res.status(200).json({ email });
-  } catch (err) {
-    return next({
-      status: 400,
-      message: err.message,
-    });
-  }
-};
+// exports.getEmailByToken = async function (req, res, next) {
+//   const { token } = req.query;
+//   try {
+//     const tokenEntry = await db.Token.findOne({ token });
+//     const email = tokenEntry.email;
+//     return res.status(200).json({ email });
+//   } catch (err) {
+//     return next({
+//       status: 400,
+//       message: err.message,
+//     });
+//   }
+// };
 
 
 exports.signup = async function (req, res, next) {
@@ -153,5 +153,23 @@ exports.signin = async function (req, res, next) {
       status: 400,
       message: err.message,
     });
+  }
+};
+
+exports.getUserById = async function (req, res, next) {
+  try {
+    const employeeId = req.params.id;
+    const user = await db.User.findOne({ _id: employeeId });
+
+    let { username, email, emailReceivedLink, type, id, applicationStatus } = user;
+    let token = jwt.sign(
+      { id, email, emailReceivedLink, username, type, applicationStatus },
+      process.env.JWT_SECRET_KEY
+    );
+    
+    return res.status(200).json({ id, email, emailReceivedLink, username, token, applicationStatus, type });
+  } catch (err) {
+    console.log("err: ", err)
+    return next(err);
   }
 };

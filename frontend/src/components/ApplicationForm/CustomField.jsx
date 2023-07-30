@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 
-export default function CustomField({ status, label, required, name, textContent }) {
+export default function CustomField({ status, label, required, name, type }) {
   return (
     <div>
       {required ? (
@@ -12,10 +12,12 @@ export default function CustomField({ status, label, required, name, textContent
       )}
       
       {status === "pending" ? (
-        <span>{textContent}</span>
+        // <span>{textContent}</span>
+        <Field type={type} id={name} name={name} disabled/>
       ) : (
-        <Field type="text" id={name} name={name} />
+        <Field type={type} id={name} name={name} />
       )}
+      
       {status !== "pending" && (
         <ErrorMessage component="span" className="errorMessage" name={name} />
       )}
