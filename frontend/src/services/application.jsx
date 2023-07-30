@@ -47,6 +47,7 @@ export function getApplicationById(id) {
         },
       })
       .then((response) => {
+        console.log("response.data in service: ", response.data);
         resolve(response.data);
       })
       .catch((err) => {

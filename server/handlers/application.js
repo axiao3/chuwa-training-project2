@@ -38,6 +38,7 @@ exports.getApplicationById = async function (req, res, next) {
         .status(404)
         .json({ message: "Application of this employee is not found" });
     }
+    console.log("got application: ", application);
     return res.status(200).json(application);
   } catch (err) {
     return next(err);
@@ -75,19 +76,6 @@ exports.updateApplicationById = async function (req, res, next) {
     return next(err);
   }
 };
-
-// exports.uploadFile = async (req, res) => {
-//   try {
-//     const application = new Application({
-//       imageUrl: req.files["image"][0].location,
-//       uploadedFile: req.files["pdf"][0].location,
-//     });
-//     await application.save();
-//     res.json({ message: "Upload successful", application });
-//   } catch (err) {
-//     res.status(500).send(err);
-//   }
-// };
 
 const uploadToS3 = (base64Data) => {
     const s3 = new AWS.S3({

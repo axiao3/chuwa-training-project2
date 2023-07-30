@@ -31,22 +31,6 @@ export const generateTokenAction = createAsyncThunk(
   }
 );
 
-// export const tokenValidationAction = createAsyncThunk(
-//   "user/tokenValidation",
-//   async (data, thunkAPI) => {
-//     try {
-//       const { token } = data;
-//       const tokenValidationRes = await isTokenValid(token);
-//       // thunkAPI.dispatch(removeError());
-//       return tokenValidationRes;
-//     } catch (error) {
-//       const { message } = error;
-//       // thunkAPI.dispatch(addError(message));
-//       return thunkAPI.rejectWithValue(message);
-//     }
-//   }
-// );
-
 export const signUpAction = createAsyncThunk(
   "user/signUp",
   async (data, thunkAPI) => {

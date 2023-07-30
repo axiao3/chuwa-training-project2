@@ -18,6 +18,7 @@ const applicationSchema = new mongoose.Schema({
   SSN: { type: String, required: true },
   dateOfBirth: { type: String, required: true },
   gender: { type: String, required: true },
+  residentStatus: { type: String, required: true },
   authorizationType: { type: String, required: true },
   otherVisaTitle: { type: String },
   startDate: { type: String },
@@ -44,9 +45,11 @@ const applicationSchema = new mongoose.Schema({
       relationship: { type: String, required: true }, //require
     },
   ],
-  
+  profilePictureName: { type: String },
   driverLicense: { type: String },
+  driverLicenseName: { type: String },
   workAuthorization: { type: String },
+  workAuthorizationName: { type: String },
   submittedStatus: { type: String, default: "pending" },
 });
 

@@ -1,9 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const multer = require('multer');
-const multerS3 = require('multer-s3');
-const AWS = require('aws-sdk');
 const errorHandler = require("./handlers/error");
 const authRoutes = require("./routes/auth");
 const applicationRoutes = require("./routes/application");
