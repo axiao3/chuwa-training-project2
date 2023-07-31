@@ -7,9 +7,9 @@ exports.createApplication = async function (req, res, next) {
     console.log("data: ", req.body);
 
     const { workAuthorization, profilePicture, driverLicense } = req.body
-    const profilePictureUrl = await uploadToS3(profilePicture);  
-    const workAuthorizationUrl = await uploadToS3(workAuthorization);  
-    const driverLicenseUrl = await uploadToS3(driverLicense);  
+    const profilePictureUrl = profilePicture ? await uploadToS3(profilePicture) : "";  
+    const workAuthorizationUrl = workAuthorization ? await uploadToS3(workAuthorization): "";  
+    const driverLicenseUrl = driverLicense ? await uploadToS3(driverLicense) : "";  
 
     req.body.profilePicture = profilePictureUrl;
     req.body.workAuthorization = workAuthorizationUrl;
@@ -45,9 +45,14 @@ exports.getApplicationById = async function (req, res, next) {
   }
 };
 
-exports.getAllApplications = async function (req, res, next) {
+exports.getApplications = async function (req, res, next) {
   try {
-    const applications = await db.Application.find();
+    let query = {};
+    if (req.query.status) {
+      query.status = req.query.status;
+    }
+
+    const applications = await db.Application.find(query);
     return res.status(200).json(applications);
   } catch (err) {
     return next(err);

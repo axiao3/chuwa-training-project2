@@ -9,19 +9,20 @@ exports.getRegistrationHistory = async function (req, res, next) {
       .select("registrationLink email token")
       .exec();
 
-    // An array to hold the result
+    console.log("tokens", tokens);
     const result = [];
 
     // Loop over the tokens to gather the required information
     for (let token of tokens) {
       const user = await User.findOne({ token: token.token })
-        .select("username")
+        .select("username applicationStatus")
         .exec();
-      const application = await Application.findOne({
-        email: token.email,
-      }).exec();
+      // const application = await Application.findOne({
+      //   email: token.email,
+      // }).exec();
+      console.log("user: ", user);
 
-      const isSubmitted = application ? true : false;
+      const isSubmitted = (user && user.applicationStatus !== "never submitted") ? true : false;
 
       result.push({
         registrationLink: token.registrationLink,

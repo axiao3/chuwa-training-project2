@@ -75,4 +75,24 @@ export function getApplicationById(id) {
   });
 }
 
+export function getAllApplicationsByStatus(status) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(apiUrl, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+        params: {
+          status: status
+        }
+      })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+}
 
