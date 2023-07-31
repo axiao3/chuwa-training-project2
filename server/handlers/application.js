@@ -62,12 +62,12 @@ exports.getApplications = async function (req, res, next) {
 exports.updateApplicationById = async function (req, res, next) {
   try {
     const { workAuthorization, profilePicture, driverLicense } = req.body
-    const profilePictureUrl = await uploadToS3(profilePicture);  
-    const workAuthorizationUrl = await uploadToS3(workAuthorization);  
-    const driverLicenseUrl = await uploadToS3(driverLicense);  
+    const profilePictureUrl = profilePicture ? await uploadToS3(profilePicture) : "";  
+    const workAuthorizationUrl = workAuthorization ? await uploadToS3(workAuthorization): "";  
+    const driverLicenseUrl = driverLicense ? await uploadToS3(driverLicense) : "";  
 
     req.body.profilePicture = profilePictureUrl;
-    req.body.workAuthorization = workAuthorizationUrl;
+    req.body.workAuthorization = workAuthorizationUrl; 
     req.body.driverLicense = driverLicenseUrl;
     req.body.submittedStatus = "pending";
 

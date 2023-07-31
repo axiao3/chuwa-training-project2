@@ -3,50 +3,45 @@
 import React, { useState, useEffect } from "react";
 import { Button, List, Radio } from "antd";
 import "./style.css";
-import { getAllApplicationsByStatus } from "../../services/application";
+import { getAllApplicationAction } from "../../app/applicationSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const ApplicationReview = () => {
-  const [status, setStatus] = useState("Pending");
-  const [applications, setApplications] = useState([]);
-
-  //   const filteredApplications = applications.filter(app => app.status === status);
+  const dispatch = useDispatch();
+  const { applications } = useSelector((state) => state.applications);
+  const [status, setStatus] = useState("pending");
+  const [applicationsByState, setApplicationsByState] = useState([]);
 
   useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        const response = await getAllApplicationsByStatus(status);
-        setApplications(response);
-      } catch (error) {
-        console.error("Failed to fetch applications", error);
-      }
-    };
+    dispatch(getAllApplicationAction());
+  }, []);
 
-    fetchApplications();
-  }, [status]);
+  const handleStateChangeHandler = (e) => {
+    // setStatus(e.target.value);
+    setApplicationsByState(
+      applications.filter((each) => {
+        return each.submittedStatus === e.target.value;
+      })
+    );
+  };
 
   return (
     <div>
-      <Radio.Group
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-        style={{ marginBottom: 20 }}
-      >
-        <Radio.Button value="Pending">Pending</Radio.Button>
-        <Radio.Button value="Rejected">Rejected</Radio.Button>
-        <Radio.Button value="Approved">Approved</Radio.Button>
-      </Radio.Group>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Radio.Group
+          onChange={handleStateChangeHandler}
+          style={{ marginBottom: 20 }}
+        >
+          <Radio.Button value="pending">Pending</Radio.Button>
+          <Radio.Button value="rejected">Rejected</Radio.Button>
+          <Radio.Button value="approved">Approved</Radio.Button>
+        </Radio.Group>
+      </div>
 
       <List
         itemLayout="horizontal"
-        dataSource={applications}
+        dataSource={applicationsByState}
         renderItem={(item) => (
-          //   <List.Item
-          //     actions={[
-          //       <a href={item.link} target="_blank" rel="noopener noreferrer">
-          //         View Application
-          //       </a>,
-          //     ]}
-          //   >
           <List.Item
             actions={[
               <Button
@@ -59,7 +54,12 @@ const ApplicationReview = () => {
               </Button>,
             ]}
           >
-            <List.Item.Meta title={item.fullName} description={item.email} />
+            <List.Item.Meta
+              title={
+                item.firstName + " " + item.middleName + " " + item.lastName
+              }
+              description={item.email}
+            />
           </List.Item>
         )}
       />

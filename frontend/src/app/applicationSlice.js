@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createApplication, updateApplicationById } from "../services/application";
+import { createApplication, updateApplicationById, getAllApplications } from "../services/application";
 // import { removeError, addError } from "./errorSlice";
 
 const initialState = {
@@ -29,6 +29,21 @@ export const updateApplicationAction = createAsyncThunk(
       console.log("data: ", data);
       const application = await updateApplicationById(data.user, data);
       return application;
+    } catch (error) {
+      const { message } = error;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getAllApplicationAction = createAsyncThunk(
+  "application/getAllApplication",
+  async (data, thunkAPI) => {
+    try {
+      // console.log("id: ", data.user);
+      // console.log("data: ", data);
+      const applications = await getAllApplications();
+      return applications;
     } catch (error) {
       const { message } = error;
       return thunkAPI.rejectWithValue(message);
@@ -65,6 +80,16 @@ const applicationSlice = createSlice({
     });
     builder.addCase(updateApplicationAction.pending, (state, action) => {
       state.status = "update application pending";
+    });
+    builder.addCase(getAllApplicationAction.fulfilled, (state, action) => {
+      state.status = "get applications succeeded";
+      state.applications = action.payload;
+    });
+    builder.addCase(getAllApplicationAction.rejected, (state, action) => {
+      state.status = "get applications failed";
+    });
+    builder.addCase(getAllApplicationAction.pending, (state, action) => {
+      state.status = "get applications pending";
     });
   },
 });

@@ -75,7 +75,7 @@ export function getApplicationById(id) {
   });
 }
 
-export function getAllApplicationsByStatus(status) {
+export function getApplicationsByStatus(status) {
   return new Promise((resolve, reject) => {
     axios
       .get(apiUrl, {
