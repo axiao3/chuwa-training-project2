@@ -8,7 +8,7 @@ import "./style.css";
 
 const { Option } = Select;
 
-const InfoSection = ({ title, fields, onSave }) => {
+const InfoSection = ({ title, fields, onSave, usertype }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedFields, setEditedFields] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
@@ -106,7 +106,7 @@ const InfoSection = ({ title, fields, onSave }) => {
             {isEditing ? <div className="field-input">{renderInput(field)}</div> : field.key === "profilePicture" ? <span className="field-value"><img src={field.value} alt="Preview" style={{}} width="100" /></span> : <span className="field-value">{field.value}</span>}
           </div>
         ))}
-        <div className="edit-buttons">
+        {usertype === "employee" && <div className="edit-buttons">
           {isEditing ? (
             <div>
               <Button style={{ marginRight: '10px' }} onClick={handleCancel}>Cancel</Button>
@@ -115,7 +115,8 @@ const InfoSection = ({ title, fields, onSave }) => {
           ) : (
             <Button onClick={() => setIsEditing(true)}>Edit</Button>
           )}
-        </div>
+        </div>}
+
       </div>
     </Card>
   );

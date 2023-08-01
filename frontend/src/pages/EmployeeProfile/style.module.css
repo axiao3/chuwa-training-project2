@@ -1,0 +1,29 @@
+.container {
+    padding: 20px;
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.searchBox {
+    width: 250px;
+}
+
+.listItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #f0f0f0;
+    margin-bottom: 10px;
+}
+
+.linkItem {
+    color: #1890ff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.linkItem:hover {
+    color: #40a9ff;
+}

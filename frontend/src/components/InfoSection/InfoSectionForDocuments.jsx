@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Card, Input, Modal, Button, Select, Upload } from 'antd';
 import "./style.css";
 
-const InfoSectionForDocuments = ({ title, fields, onSave }) => {
+const InfoSectionForDocuments = ({ title, fields, onSave, usertype }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedFields, setEditedFields] = useState({});
     const [filePreviews, setFilePreviews] = useState(fields.reduce((acc, field) => {
@@ -41,7 +41,7 @@ const InfoSectionForDocuments = ({ title, fields, onSave }) => {
         setFilePreviews(prev => ({ ...prev, [fileKey]: "" }));
         handleChange(fileKey, "");
         handleChange(nameKey, "");
-      };
+    };
 
     const convertToBase64 = (file) => {
         return new Promise((resolve, reject) => {
@@ -121,7 +121,7 @@ const InfoSectionForDocuments = ({ title, fields, onSave }) => {
                         ) : null}
                     </div>
                 ))}
-                <div className="edit-buttons">
+                {usertype === "employee" && <div className="edit-buttons">
                     {isEditing ? (
                         <div>
                             <Button style={{ marginRight: '10px' }} onClick={handleCancel}>Cancel</Button>
@@ -130,7 +130,8 @@ const InfoSectionForDocuments = ({ title, fields, onSave }) => {
                     ) : (
                         <Button onClick={() => setIsEditing(true)}>Edit</Button>
                     )}
-                </div>
+                </div>}
+
             </div>
         </Card>
     );
