@@ -62,27 +62,37 @@ exports.getApplications = async function (req, res, next) {
 exports.updateApplicationById = async function (req, res, next) {
   try {
     const { workAuthorization, profilePicture, driverLicense } = req.body
-    const profilePictureUrl = profilePicture ? await uploadToS3(profilePicture) : "";  
-    const workAuthorizationUrl = workAuthorization ? await uploadToS3(workAuthorization): "";  
-    const driverLicenseUrl = driverLicense ? await uploadToS3(driverLicense) : "";  
+    if (workAuthorization) {
+      const workAuthorizationUrl = await uploadToS3(workAuthorization);  
+      req.body.workAuthorization = workAuthorizationUrl; 
+    }
+    if (profilePicture) {
+      const profilePictureUrl = await uploadToS3(profilePicture);  
+      req.body.profilePicture = profilePictureUrl;
+    }
+    if (driverLicense) {
+      const driverLicenseUrl = await uploadToS3(driverLicense); 
+      req.body.driverLicense = driverLicenseUrl; 
+    } 
 
-    req.body.profilePicture = profilePictureUrl;
-    req.body.workAuthorization = workAuthorizationUrl; 
-    req.body.driverLicense = driverLicenseUrl;
-    req.body.submittedStatus = "pending";
-
+    if (req.body.submittedStatus !== "approved") {
+      req.body.submittedStatus = "pending";
+    }
+    
     const employeeId = req.params.id;
     const updates = req.body;
 
     const updatedApplication = await db.Application.findOneAndUpdate(
       { user: employeeId },
       updates,
-      { new: true }
+      { new: true } 
     );
 
-    const foundUser = await db.User.findById(employeeId);
-    foundUser.applicationStatus = "pending";
-    await foundUser.save();
+    if (req.body.submittedStatus !== "approved") {
+      const foundUser = await db.User.findById(employeeId);
+      foundUser.applicationStatus = "pending";
+      await foundUser.save();
+    }
 
     // if (!updatedApplication) {
     //   return res
@@ -117,7 +127,7 @@ const uploadToS3 = (base64Data) => {
     return new Promise((resolve, reject) => {
         s3.upload(params, (err, data) => {
             if (err) reject(err);
-            resolve(data.Location);
+            resolve(data.Location); 
         });
     });
 };

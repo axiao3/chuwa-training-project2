@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Navigate } from "react-router-dom";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as yup from "yup";
-import defaultProfileImage from "../../assets/default_profile.jpg";
 import "./style.css";
 import { createApplicationAction } from "../../app/applicationSlice";
 import { getApplicationById } from "../../services/application";

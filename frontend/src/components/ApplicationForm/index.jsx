@@ -39,7 +39,7 @@ export default function ApplicationForm(props) {
     lastName: props.lastName || "",
     middleName: props.middleName || "",
     preferredName: props.preferredName || "",
-    profilePicture: props.profilePicture || "",
+    profilePicture: props.profilePicture || "https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg",
     streetName: props.streetName || "",
     apt: props.apt || "",
     city: props.city || "",
@@ -71,56 +71,16 @@ export default function ApplicationForm(props) {
   };
 
   const US_STATES = [
-    "AL",
-    "AK",
-    "AZ",
-    "AR",
-    "CA",
-    "CT",
-    "DE",
-    "FL",
-    "GA",
-    "HI",
-    "ID",
-    "IL",
-    "IN",
-    "IA",
-    "KS",
-    "KY",
-    "LA",
-    "ME",
-    "MD",
-    "MA",
-    "MI",
-    "MN",
-    "MS",
-    "MO",
-    "MT",
-    "NE",
-    "NV",
-    "NH",
-    "NJ",
-    "NM",
-    "NY",
-    "NC",
-    "ND",
-    "OH",
-    "OK",
-    "OR",
-    "PA",
-    "RI",
-    "SC",
-    "SD",
-    "TN",
-    "TX",
-    "UT",
-    "VT",
-    "VA",
-    "WA",
-    "WV",
-    "WI",
-    "WY",
-    "DC",
+    "AL", "AK", "AZ", "AR", "CA", 
+    "CT", "DE", "FL", "GA", "HI", 
+    "ID", "IL", "IN", "IA", "KS", 
+    "KY", "LA", "ME", "MD", "MA", 
+    "MI", "MN", "MS", "MO", "MT", 
+    "NE", "NV", "NH", "NJ", "NM",
+    "NY", "NC", "ND", "OH", "OK", 
+    "OR", "PA", "RI", "SC", "SD", 
+    "TN", "TX", "UT", "VT", "VA", 
+    "WA", "WV", "WI", "WY", "DC"
   ];
 
   const cellphoneRegex =
@@ -288,7 +248,7 @@ export default function ApplicationForm(props) {
               )}
 
               <img
-                src={formik.values.profilePicture || defaultProfileImage}
+                src={formik.values.profilePicture}
                 alt="Uploaded Preview"
                 style={{
                   maxWidth: "50px",

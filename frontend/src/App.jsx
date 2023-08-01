@@ -11,7 +11,7 @@ import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import Home from "./pages/Home";
 import EmployeeProfiles from "./pages/employeeProfiles";
-import PersonalInfoPage from "./pages/PersonalInfoPage";
+import PersonalInformation from "./pages/PersonalInfo";
 import HiringManagement from "./pages/HiringManagement";
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
               <Route path="/employees/:id/hiring" element={<HiringManagement />} />
               {/*HR↑ Employee↓*/}
 
-              <Route path="/employees/:id" element={<PersonalInfoPage />} />
+              <Route path="/employees/:id" element={<PersonalInformation />} />
               <Route
                 path="/employees/:id/visa"
                 element={<>visa Status Management for employee</>}

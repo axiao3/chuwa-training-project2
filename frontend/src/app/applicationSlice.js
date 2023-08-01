@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createApplication, updateApplicationById, getAllApplications } from "../services/application";
+import { createApplication, updateApplicationById, getAllApplications, getApplicationById } from "../services/application";
 // import { removeError, addError } from "./errorSlice";
 
 const initialState = {
@@ -51,6 +51,20 @@ export const getAllApplicationAction = createAsyncThunk(
   }
 );
 
+export const getApplicationByIdAction = createAsyncThunk(
+  "application/getApplicationById",
+  async (data, thunkAPI) => {
+    try {
+      // console.log("data", data);
+      const application = await getApplicationById(data.id);
+      return application;
+    } catch (error) {
+      const { message } = error;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const applicationSlice = createSlice({
   name: "applications",
   initialState,
@@ -63,7 +77,7 @@ const applicationSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(createApplicationAction.fulfilled, (state, action) => {
       state.status = "create application succeeded";
-      state.applications.push(action.payload);
+      // state.applications.push(action.payload);
     });
     builder.addCase(createApplicationAction.rejected, (state, action) => {
       state.status = "create application failed";
@@ -73,7 +87,7 @@ const applicationSlice = createSlice({
     });
     builder.addCase(updateApplicationAction.fulfilled, (state, action) => {
       state.status = "update application succeeded";
-      state.applications.push(action.payload);
+      state.applications = [action.payload];
     });
     builder.addCase(updateApplicationAction.rejected, (state, action) => {
       state.status = "update application failed";
@@ -90,6 +104,16 @@ const applicationSlice = createSlice({
     });
     builder.addCase(getAllApplicationAction.pending, (state, action) => {
       state.status = "get applications pending";
+    });
+    builder.addCase(getApplicationByIdAction.fulfilled, (state, action) => {
+      state.status = "get application by Id succeeded";
+      state.applications = [action.payload];
+    });
+    builder.addCase(getApplicationByIdAction.rejected, (state, action) => {
+      state.status = "get application by Id failed";
+    });
+    builder.addCase(getApplicationByIdAction.pending, (state, action) => {
+      state.status = "get application by Id pending";
     });
   },
 });
