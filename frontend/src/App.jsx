@@ -10,9 +10,10 @@ import ErrorPage from "./pages/ErrorPage";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import Home from "./pages/Home";
-import EmployeeProfiles from "./pages/employeeProfiles";
+// import EmployeeProfiles from "./pages/employeeProfiles";
 import PersonalInformation from "./pages/PersonalInfo";
 import HiringManagement from "./pages/HiringManagement";
+import EmployeeProfile from "./pages/EmployeeProfile";
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
               <Route path="/application" element={<Application />} />
 
               {/* reuse auth */}
-              <Route path="/employees" element={<EmployeeProfiles />} />
+              <Route path="/employees" element={<EmployeeProfile />} />
               <Route
                 path="/employees/:id/visaHR"
                 element={<>Visa Status Management page for HR: sort & search</>}
