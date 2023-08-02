@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+const AWS = require("aws-sdk");
 const Application = require("../models/application");
 const db = require("../models");
 
@@ -6,10 +6,16 @@ exports.createApplication = async function (req, res, next) {
   try {
     console.log("data: ", req.body);
 
-    const { workAuthorization, profilePicture, driverLicense } = req.body
-    const profilePictureUrl = profilePicture ? await uploadToS3(profilePicture) : "";  
-    const workAuthorizationUrl = workAuthorization ? await uploadToS3(workAuthorization): "";  
-    const driverLicenseUrl = driverLicense ? await uploadToS3(driverLicense) : "";  
+    const { workAuthorization, profilePicture, driverLicense } = req.body;
+    const profilePictureUrl = profilePicture
+      ? await uploadToS3(profilePicture)
+      : "";
+    const workAuthorizationUrl = workAuthorization
+      ? await uploadToS3(workAuthorization)
+      : "";
+    const driverLicenseUrl = driverLicense
+      ? await uploadToS3(driverLicense)
+      : "";
 
     req.body.profilePicture = profilePictureUrl;
     req.body.workAuthorization = workAuthorizationUrl;
@@ -61,31 +67,31 @@ exports.getApplications = async function (req, res, next) {
 
 exports.updateApplicationById = async function (req, res, next) {
   try {
-    const { workAuthorization, profilePicture, driverLicense } = req.body
+    const { workAuthorization, profilePicture, driverLicense } = req.body;
     if (workAuthorization) {
-      const workAuthorizationUrl = await uploadToS3(workAuthorization);  
-      req.body.workAuthorization = workAuthorizationUrl; 
+      const workAuthorizationUrl = await uploadToS3(workAuthorization);
+      req.body.workAuthorization = workAuthorizationUrl;
     }
     if (profilePicture) {
-      const profilePictureUrl = await uploadToS3(profilePicture);  
+      const profilePictureUrl = await uploadToS3(profilePicture);
       req.body.profilePicture = profilePictureUrl;
     }
     if (driverLicense) {
-      const driverLicenseUrl = await uploadToS3(driverLicense); 
-      req.body.driverLicense = driverLicenseUrl; 
-    } 
+      const driverLicenseUrl = await uploadToS3(driverLicense);
+      req.body.driverLicense = driverLicenseUrl;
+    }
 
     if (req.body.submittedStatus !== "approved") {
       req.body.submittedStatus = "pending";
     }
-    
+
     const employeeId = req.params.id;
     const updates = req.body;
 
     const updatedApplication = await db.Application.findOneAndUpdate(
       { user: employeeId },
       updates,
-      { new: true } 
+      { new: true }
     );
 
     if (req.body.submittedStatus !== "approved") {
@@ -107,27 +113,28 @@ exports.updateApplicationById = async function (req, res, next) {
 };
 
 const uploadToS3 = (base64Data) => {
-    const s3 = new AWS.S3({
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        region: 'us-east-1'  // Replace 'your-region' with your AWS region, e.g., 'us-west-1'
-    });
+  console.log("base64data in upload to s3", base64Data, typeof base64Data);
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: "us-east-1", // Replace 'your-region' with your AWS region, e.g., 'us-west-1'
+  });
 
-    const buffer = Buffer.from(base64Data.split(",")[1], 'base64');
-    const mimeType = base64Data.split(";")[0].split(":")[1];  // Extracts MIME type from "data:{MIME};base64"
+  const buffer = Buffer.from(base64Data.split(",")[1], "base64");
+  const mimeType = base64Data.split(";")[0].split(":")[1]; // Extracts MIME type from "data:{MIME};base64"
 
-    const params = {
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: `${Date.now()}-${Math.round(Math.random() * 1E9)}`,  // Generate a unique filename
-        Body: buffer,
-        ContentType: mimeType,
-        ContentEncoding: 'base64'
-    };
-    
-    return new Promise((resolve, reject) => {
-        s3.upload(params, (err, data) => {
-            if (err) reject(err);
-            resolve(data.Location); 
-        });
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: `${Date.now()}-${Math.round(Math.random() * 1e9)}`, // Generate a unique filename
+    Body: buffer,
+    ContentType: mimeType,
+    ContentEncoding: "base64",
+  };
+
+  return new Promise((resolve, reject) => {
+    s3.upload(params, (err, data) => {
+      if (err) reject(err);
+      resolve(data.Location);
     });
+  });
 };

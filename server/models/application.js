@@ -6,7 +6,7 @@ const applicationSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   middleName: { type: String },
   preferredName: { type: String },
-  profilePicture: {type: String},
+  profilePicture: { type: String },
   streetName: { type: String, required: true },
   apt: { type: String, required: true },
   city: { type: String, required: true },
@@ -50,9 +50,15 @@ const applicationSchema = new mongoose.Schema({
   driverLicenseName: { type: String },
   workAuthorization: { type: String },
   workAuthorizationName: { type: String },
+  OptEad: { type: String, default: "" },
+  OptEadName: { type: String, default: "" },
+  I983: { type: String, default: "" },
+  I983Name: { type: String, default: "" },
+  I20: { type: String, default: "" },
+  I20Name: { type: String, default: "" },
   submittedStatus: { type: String, default: "pending" },
 });
 
-const Application = mongoose.model('Application', applicationSchema);
+const Application = mongoose.model("Application", applicationSchema);
 
 module.exports = Application;
