@@ -10,7 +10,7 @@ exports.createApplication = async function (req, res, next) {
     const profilePictureUrl = profilePicture ? await uploadToS3(profilePicture) : "";  
     const workAuthorizationUrl = workAuthorization ? await uploadToS3(workAuthorization): "";  
     const driverLicenseUrl = driverLicense ? await uploadToS3(driverLicense) : "";  
-
+ 
     req.body.profilePicture = profilePictureUrl;
     req.body.workAuthorization = workAuthorizationUrl;
     req.body.driverLicense = driverLicenseUrl;
@@ -52,7 +52,7 @@ exports.getApplications = async function (req, res, next) {
       query.status = req.query.status;
     }
 
-    const applications = await db.Application.find(query);
+    const applications = await db.Application.find(query).sort({ _id : "-1" });
     return res.status(200).json(applications);
   } catch (err) {
     return next(err);
@@ -62,24 +62,33 @@ exports.getApplications = async function (req, res, next) {
 exports.updateApplicationById = async function (req, res, next) {
   try {
     const { workAuthorization, profilePicture, driverLicense } = req.body
-    if (workAuthorization) {
+    if (workAuthorization && workAuthorization.slice(0,4) === "data") {
       const workAuthorizationUrl = await uploadToS3(workAuthorization);  
       req.body.workAuthorization = workAuthorizationUrl; 
     }
-    if (profilePicture) {
+    if (profilePicture && profilePicture.slice(0,4) === "data") {
       const profilePictureUrl = await uploadToS3(profilePicture);  
       req.body.profilePicture = profilePictureUrl;
     }
-    if (driverLicense) {
+    if (driverLicense && driverLicense.slice(0,4) === "data") {
       const driverLicenseUrl = await uploadToS3(driverLicense); 
       req.body.driverLicense = driverLicenseUrl; 
     } 
 
-    if (req.body.submittedStatus !== "approved") {
+    const employeeId = req.params.id;
+    if (req.body.submittedStatus !== "pending") {
+      console.log("req.body.submittedStatus", req.body.submittedStatus)
+      const foundUser = await db.User.findById(employeeId);
+      foundUser.applicationStatus = "pending";
+      await foundUser.save();
       req.body.submittedStatus = "pending";
+    } else {
+      const foundUser = await db.User.findById(employeeId);
+      foundUser.applicationStatus = req.body.managerSetStatus;
+      await foundUser.save();
+      req.body.submittedStatus = req.body.managerSetStatus;
     }
     
-    const employeeId = req.params.id;
     const updates = req.body;
 
     const updatedApplication = await db.Application.findOneAndUpdate(
@@ -87,12 +96,6 @@ exports.updateApplicationById = async function (req, res, next) {
       updates,
       { new: true } 
     );
-
-    if (req.body.submittedStatus !== "approved") {
-      const foundUser = await db.User.findById(employeeId);
-      foundUser.applicationStatus = "pending";
-      await foundUser.save();
-    }
 
     // if (!updatedApplication) {
     //   return res

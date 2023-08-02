@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, useParams } from "react-router-dom";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as yup from "yup";
 import defaultProfileImage from "../../assets/default_profile.jpg";
@@ -15,15 +15,19 @@ import { getUserByIdAction } from "../../app/userSlice";
 import CustomField from "./CustomField";
 
 export default function ApplicationForm(props) {
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useSelector((state) => state.user);
+  const [feedback, setFeedback] = useState("");
+  const [reject, setReject] = useState(false);
+    // useEffect(() => {
+    //   if (!isAuthenticated) {
+    //     navigate("/signin", { state: { from: "/application" } });
+    //   }
+    // }, [isAuthenticated, navigate]);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/signin", { state: { from: "/application" } });
-    }
-  }, [isAuthenticated, navigate]);
+  console.log("props.id: ", props.user_id);
 
   const initialEmergencyContact = {
     firstName: "",
@@ -47,7 +51,7 @@ export default function ApplicationForm(props) {
     zip: props.zip || "",
     cellphone: props.cellphone || "",
     workphone: props.workphone || "",
-    email: user.emailReceivedLink,
+    email: props.email || user.emailReceivedLink,
     SSN: props.SSN || "",
     driverLicense: props.driverLicense || "",
     dateOfBirth: props.dateOfBirth || "",
@@ -68,6 +72,7 @@ export default function ApplicationForm(props) {
     profilePictureName: props.profilePictureName || "",
     driverLicenseName: props.driverLicenseName || "",
     workAuthorizationName: props.workAuthorizationName || "",
+    obboardingFeedback: props.obboardingFeedback || ""
   };
 
   const US_STATES = [
@@ -140,7 +145,8 @@ export default function ApplicationForm(props) {
 
   const onSubmit = (values) => {
     // alert(values);
-    values.user = user.id;
+    values.user = props.user_id;
+    values.obboardingFeedback = "";
     console.log("values:", values);
     if (props.status === "never submitted") {
       dispatch(createApplicationAction(values)).then((action) => {
@@ -166,6 +172,28 @@ export default function ApplicationForm(props) {
       });
     }
   };
+
+  const handleApprove = () => {
+    const approve = { submittedStatus: "pending", managerSetStatus: "approved", user: props.user_id }
+    console.log(approve);
+    dispatch(updateApplicationAction(approve)).then((action) => {
+      if (updateApplicationAction.fulfilled.match(action)) { 
+        alert("Approve Success!");
+        window.location.href = `/${props.user_id}/application`;
+       }
+    })
+  }
+
+  const handleReject = () => {
+    const reject = { submittedStatus: "pending", managerSetStatus: "rejected", obboardingFeedback:  feedback , user: props.user_id }
+    console.log(reject);
+    dispatch(updateApplicationAction(reject)).then((action) => {
+      if (updateApplicationAction.fulfilled.match(action)) { 
+        alert("Reject Success!");
+        window.location.href = `/${props.user_id}/application`;
+       }
+    })
+  }
 
   return (
     <Formik
@@ -228,7 +256,11 @@ export default function ApplicationForm(props) {
 
         return (
           <Form className="Form">
-            <h2 style={{ color: "red" }}>Status: {props.status}</h2>
+            {props.usertype === "manager" ? <h3 style={{ color: "red" }}>Status: {props.applicationStatus}</h3> :
+              <h3 style={{ color: "red" }}>Status: {props.status}</h3>}
+            
+            {((props.status === "rejected" && props.obboardingFeedback) || props.usertype === "manager" && props.obboardingFeedback) && <h4 style={{ color: "red" }}>Feedback: {props.obboardingFeedback}</h4>}
+            {/* <h4 style={{ color: "red" }}>Feedback: {props.obboardingFeedback}</h4> */}
             <p>
               <span className="asterisk">*</span> stands for required field
             </p>
@@ -306,7 +338,7 @@ export default function ApplicationForm(props) {
               <div>
                 <label htmlFor="driver_license "> Driver License:</label>
                 {props.status !== "pending" &&
-                  (<Field id="driver_license" name="driver_license" type="file" onChange={handleDriverLicenseChange} />)
+                  (<Field style={{display: "inline"}} id="driver_license" name="driver_license" type="file" onChange={handleDriverLicenseChange} />)
                 }
                 {formik.values.driverLicenseName ?
                   (<a className="form_a" href={formik.values.driverLicense} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
@@ -378,10 +410,10 @@ export default function ApplicationForm(props) {
                   )}
 
                   {formik.values.authorizationType === "F1(CPT/OPT)" &&
-                    (<div>
+                    (<div style={{marginTop: "10px"}}>
                       <label className="required" htmlFor="F1">Upload OPT Receipt:</label>
                       {props.status !== "pending" && (<>
-                        <Field name="work_authorization" type="file" onChange={handleWorkAuthorizationChange} required />
+                        <Field style={{display: "inline"}} name="work_authorization" type="file" onChange={handleWorkAuthorizationChange} required />
                         <ErrorMessage component="span" className="errorMessage" name="workAuthorization" />
                       </>)}
                       {formik.values.workAuthorizationName ? (
@@ -425,7 +457,7 @@ export default function ApplicationForm(props) {
                     <div>
                       {formik.values.emergencyContacts.length > 0 &&
                         formik.values.emergencyContacts.map((contact, index) => (
-                          <div key={index} className="emergency">
+                          <div style={{marginTop: "10px"}} key={index} className="emergency">
                             <div>{`Emergency Contact ${index + 1}`}</div>
                             <div>
                               <label className="required">First Name:</label>
@@ -477,11 +509,11 @@ export default function ApplicationForm(props) {
                       <div key={index} className="emergency">
                         <div>{`Emergency Contact ${index + 1}`}</div>
                         <div>
-                          <label>First Name:</label>
+                          <label className="required">First Name:</label>
                           <input value={oneEmergencyObject.firstName} disabled />
                         </div>
                         <div>
-                          <label>Last Name:</label>
+                          <label className="required">Last Name:</label>
                           <input value={oneEmergencyObject.lastName} disabled />
                         </div>
                         <div>
@@ -497,7 +529,7 @@ export default function ApplicationForm(props) {
                           <input value={oneEmergencyObject.email} disabled />
                         </div>
                         <div>
-                          <label>relationship:</label>
+                          <label className="required">relationship:</label>
                           <input value={oneEmergencyObject.relationship} disabled />
                         </div>
                         <br></br>
@@ -545,10 +577,42 @@ export default function ApplicationForm(props) {
                 ) : null}
               </div>
             </div>
-            <br></br>
-            {props.status !== "pending" && (
+
+            {props.usertype === "employee" && (props.status !== "pending" && (
               <button className="form_button" type="submit">Submit</button>
-            )}
+            ))}
+
+
+
+            {props.usertype === "manager" && (props.applicationStatus === "pending" && (
+              <>
+                {reject &&
+                  <>
+                    <div className="required" style={{ color: "gray" }}>Provide Feedback</div>
+                    <Field
+                      name="obboardingFeedback"
+                      id="obboardingFeedback"
+                      as="textarea"
+                      rows="5"
+                      style={{ fontFamily: 'Arial, sans-serif' }}
+                      value={feedback}
+                      onChange={(e) => setFeedback(e.target.value)}
+                      required />
+                  </>}
+
+                {!reject ?
+                  <div className="two_buttons">
+                    <button className="form_button" type="button" onClick={handleApprove}>Approve</button>
+                    <button className="form_button" type="button" onClick={() => setReject(true)}>Reject</button>
+                  </div> :
+                  <div className="two_buttons">
+                    <button className="form_button" type="button" onClick={handleReject}>Confirm Reject</button>
+                    <button className="form_button" type="button" onClick={() => { setReject(false); setFeedback("") }}>Cancel</button>
+                  </div>}
+
+              </>
+            ))}
+
           </Form>
         );
       }}

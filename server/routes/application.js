@@ -13,7 +13,7 @@ router.post("/", ensureCorrectUser, createApplication);
 router.get("/", ensureManager, getApplications);
 // router.get("/:id", ensureManager, getApplicationById);
 router.get("/:id", getApplicationById);
-router.put("/:id", ensureCorrectUser, updateApplicationById);
+router.put("/:id", updateApplicationById);
 //manager edit application
 
 module.exports = router;

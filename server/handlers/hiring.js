@@ -6,6 +6,7 @@ exports.getRegistrationHistory = async function (req, res, next) {
   try {
     // Fetch all the tokens
     const tokens = await Token.find({})
+      .sort('-expiresAt')
       .select("registrationLink email token")
       .exec();
 

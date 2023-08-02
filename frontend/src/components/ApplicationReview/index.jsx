@@ -41,12 +41,14 @@ const ApplicationReview = () => {
       <List
         itemLayout="horizontal"
         dataSource={applicationsByState}
-        renderItem={(item) => (
-          <List.Item
+        renderItem={(item) => {
+          // console.log(item.user);
+          return (<List.Item
+
             actions={[
               <Button
                 type="link"
-                href={item.link}
+                href={`/${item.user}/application`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -56,12 +58,15 @@ const ApplicationReview = () => {
           >
             <List.Item.Meta
               title={
-                item.firstName + " " + item.middleName + " " + item.lastName
+                item.firstName + (item.preferredName && "(" + item.preferredName + ") ") + item.middleName + " " + item.lastName
               }
               description={item.email}
             />
-          </List.Item>
-        )}
+          </List.Item>)
+        }
+
+
+        }
       />
     </div>
   );

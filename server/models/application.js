@@ -51,6 +51,7 @@ const applicationSchema = new mongoose.Schema({
   workAuthorization: { type: String },
   workAuthorizationName: { type: String },
   submittedStatus: { type: String, default: "pending" },
+  obboardingFeedback: { type: String, default: "" },
 });
 
 const Application = mongoose.model('Application', applicationSchema);

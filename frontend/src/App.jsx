@@ -26,7 +26,7 @@ function App() {
               <Route path="/home" element={<Home />} />
               <Route path="/signup" element={<Register />} />
               <Route path="/signin" element={<SignIn />} />
-              <Route path="/application" element={<Application />} />
+              <Route path="/:id/application" element={<Application />} />
 
               {/* reuse auth */}
               <Route path="/employees" element={<EmployeeProfile />} />
