@@ -29,14 +29,18 @@ export default function AuthForm({ type, onSubmit }) {
 
   const handleEmailBlur = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setEmailWarning(!emailRegex.test(email) ? "Invalid Email input!" : null);
+    setEmailWarning(
+      !email || !emailRegex.test(email) ? "Invalid Email input!" : null
+    );
     setEmailTouched(true);
   };
 
   const handleUsernameBlur = () => {
     const usernameRegex = /^[a-zA-Z0-9_]{5,16}$/;
     setUsernameWarning(
-      !usernameRegex.test(username) ? "Invalid Username input!" : null
+      !username || !usernameRegex.test(username)
+        ? "Invalid Username input!"
+        : null
     );
     setUsernameTouched(true);
   };
