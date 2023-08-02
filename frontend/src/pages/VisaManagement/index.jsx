@@ -37,7 +37,10 @@ export default function VisaManagement() {
   );
   console.log("app in visa: ", application);
   const [currentVisa, setCurrentVisa] = useState("OPT Receipt");
-  if (application?.submittedStatus === "approved") {
+  if (
+    application?.submittedStatus === "approved" &&
+    application?.OptEad === ""
+  ) {
     setCurrentVisa("OPT EAD");
   }
 
@@ -63,11 +66,34 @@ export default function VisaManagement() {
               {(() => {
                 switch (currentVisa) {
                   case "OPT Receipt":
+                    if (application.submittedStatus === "pending") {
+                      return <p>Waiting for HR to approve your OPT Receipt</p>;
+                    } else if (application.submittedStatus === "approved") {
+                      return (
+                        <div>
+                          <p>Please upload a copy of your OPT EAD</p>
+                          <InfoSectionForDocuments
+                            usertype={user.type}
+                            title="Upload files"
+                            fields={[
+                              {
+                                key: "OptEad",
+                                label: "OPT EAD",
+                                value: application.OptEad,
+                                fileName: application.OptEadName,
+                                inputType: "file",
+                                name: "OptEadName",
+                              },
+                            ]}
+                            onSave={handleUpload}
+                          />
+                        </div>
+                      );
+                    } //else
                     return (
                       <div>
-                        <p>
-                          You are on the step to upload or modify OPT Receipt.
-                        </p>
+                        <p>HR's feedback:</p>
+                        <p>Please upload your OPT receipt again.</p>
                         <InfoSectionForDocuments
                           usertype={user.type}
                           title="Upload files"
@@ -86,6 +112,9 @@ export default function VisaManagement() {
                       </div>
                     );
                   case "OPT EAD":
+                    if (application.submittedStatus === "pending") {
+                      return <p>Waiting for HR to approve your OPT Receipt</p>;
+                    }
                     return (
                       <div>
                         <p>You are on the step to upload or modify OPT EAD.</p>
@@ -103,7 +132,6 @@ export default function VisaManagement() {
                         <p>You are on the step to upload or modify I-20.</p>
                       </div>
                     );
-                  // Add more cases here for other values of currentVisa
                   default:
                     return null;
                 }
