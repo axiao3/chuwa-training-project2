@@ -1,0 +1,37 @@
+input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+}
+
+label {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.passwordInput {
+  display: flex;
+  /* align-items: center; */
+  /* border-radius: 4px; */
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  border-radius: 4px;
+  width: 103%;
+}
+
+.button {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}

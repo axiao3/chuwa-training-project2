@@ -2,12 +2,13 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import AuthForm from "../../components/AuthForm";
 import { signUpAction } from "../../app/userSlice";
 import { isTokenValid } from "../../services/auth";
 import { Loading } from "../../utils/Loading";
 import waiting from "../../utils/waiting";
+import style from "./style.module.css";
 
 export default function SignUp({ token }) {
   const navigate = useNavigate();
@@ -42,18 +43,20 @@ export default function SignUp({ token }) {
   ) => {
     e.preventDefault();
     if (!emailWarning && !usernameWarning && !passwordWarning) {
-      dispatch(signUpAction({ token, email, username, password })).then(action => {
-        if (signUpAction.fulfilled.match(action)) {
-          waiting(1000).then(() => {
-            // alert("Sign Up Success!");
-            window.location.href = "/signin";
-          })        
-        } 
-        // else if (signUpAction.rejected.match(action)) {
-        //     alert("Sign Up Failed!");
-        //     // Handle error logic here
-        //   }
-      });
+      dispatch(signUpAction({ token, email, username, password })).then(
+        (action) => {
+          if (signUpAction.fulfilled.match(action)) {
+            waiting(1000).then(() => {
+              // alert("Sign Up Success!");
+              window.location.href = "/signin";
+            });
+          }
+          // else if (signUpAction.rejected.match(action)) {
+          //     alert("Sign Up Failed!");
+          //     // Handle error logic here
+          //   }
+        }
+      );
     }
   };
 
@@ -62,9 +65,12 @@ export default function SignUp({ token }) {
       {isLoading ? (
         <Loading />
       ) : tokenResponse && tokenResponse.status ? (
-        <div>
-          <p className="title">Sign up an account</p>
+        <div className={style.container}>
+          <p className={style.title}>Sign up an account</p>
           <AuthForm type="Sign Up" onSubmit={handleSubmit} />
+          <p>
+            Already had an account? <Link to="/signin">Sign In</Link>
+          </p>
         </div>
       ) : (
         <p>{tokenError}</p>

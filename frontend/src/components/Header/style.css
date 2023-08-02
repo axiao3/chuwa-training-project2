@@ -89,13 +89,14 @@ nav p {
   }
 }
 
-/*----------Cart----------*/
-.cart {
-  z-index: 999;
-  background: white;
+.nav-menu {
+  display: flex;
+  gap: 10px;
+}
 
-  position: absolute;
-  right: 0;
-
-  min-width: 400px;
+@media (max-width: 300px) {
+  .nav-menu {
+    flex-direction: column;
+    gap: 5px;
+  }
 }

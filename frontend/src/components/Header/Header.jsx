@@ -57,16 +57,7 @@ export default function Header(props) {
             Chuwa
           </span>
         </p>
-        <form className="nav-item" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
-          />
-          <button type="submit">
-            <FontAwesomeIcon icon={faSearch} />
-          </button>
-        </form>
+
         <div className="nav-item">
           {isAuthenticated ? (
             <button onClick={handleLogOut}>
@@ -84,12 +75,35 @@ export default function Header(props) {
             </button>
           )}
 
-          {/* {isAuthenticated ? ( //and is hr?
-            <button>Menu</button>
-          ) : null} */}
+          {isAuthenticated ? (
+            <div className="nav-menu">
+              {user.type === "employee" ? (
+                <>
+                  <button onClick={() => navigate("/employees/:id")}>
+                    Personal Information
+                  </button>
+                  <button onClick={() => navigate("/employees/visa")}>
+                    Visa Status Management
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => navigate("/home")}>Home</button>
+                  <button onClick={() => navigate("/employees")}>
+                    Employee Profiles
+                  </button>
+                  <button onClick={() => navigate("/employees/visa")}>
+                    Visa Status Management
+                  </button>
+                  <button onClick={() => navigate("/employees/:id/hiring")}>
+                    Hiring Management
+                  </button>
+                </>
+              )}
+            </div>
+          ) : null}
         </div>
       </nav>
-      {/* {cartOpen ? <Cart setCartOpen={handleCart} /> : null} */}
     </header>
   );
 }

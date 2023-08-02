@@ -39,7 +39,9 @@ export default function ApplicationForm(props) {
     lastName: props.lastName || "",
     middleName: props.middleName || "",
     preferredName: props.preferredName || "",
-    profilePicture: props.profilePicture || "https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg",
+    profilePicture:
+      props.profilePicture ||
+      "https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg",
     streetName: props.streetName || "",
     apt: props.apt || "",
     city: props.city || "",
@@ -71,16 +73,56 @@ export default function ApplicationForm(props) {
   };
 
   const US_STATES = [
-    "AL", "AK", "AZ", "AR", "CA", 
-    "CT", "DE", "FL", "GA", "HI", 
-    "ID", "IL", "IN", "IA", "KS", 
-    "KY", "LA", "ME", "MD", "MA", 
-    "MI", "MN", "MS", "MO", "MT", 
-    "NE", "NV", "NH", "NJ", "NM",
-    "NY", "NC", "ND", "OH", "OK", 
-    "OR", "PA", "RI", "SC", "SD", 
-    "TN", "TX", "UT", "VT", "VA", 
-    "WA", "WV", "WI", "WY", "DC"
+    "AL",
+    "AK",
+    "AZ",
+    "AR",
+    "CA",
+    "CT",
+    "DE",
+    "FL",
+    "GA",
+    "HI",
+    "ID",
+    "IL",
+    "IN",
+    "IA",
+    "KS",
+    "KY",
+    "LA",
+    "ME",
+    "MD",
+    "MA",
+    "MI",
+    "MN",
+    "MS",
+    "MO",
+    "MT",
+    "NE",
+    "NV",
+    "NH",
+    "NJ",
+    "NM",
+    "NY",
+    "NC",
+    "ND",
+    "OH",
+    "OK",
+    "OR",
+    "PA",
+    "RI",
+    "SC",
+    "SD",
+    "TN",
+    "TX",
+    "UT",
+    "VT",
+    "VA",
+    "WA",
+    "WV",
+    "WI",
+    "WY",
+    "DC",
   ];
 
   const cellphoneRegex =
@@ -227,12 +269,12 @@ export default function ApplicationForm(props) {
         };
 
         return (
-          <Form>
+          <Form className={style.container}>
             <h2 style={{ color: "red" }}>Status: {props.status}</h2>
             <p>
               <span className="asterisk">*</span> stands for required field
             </p>
-            <div>
+            <div className={style.imgdiv}>
               {props.status !== "pending" ? (
                 <label className="custom-file-upload">
                   <input
@@ -593,7 +635,12 @@ export default function ApplicationForm(props) {
                         />
                       </>
                     ) : (
-                      <Field id="otherVisaTitle" name="otherVisaTitle" type="text" disabled/>
+                      <Field
+                        id="otherVisaTitle"
+                        name="otherVisaTitle"
+                        type="text"
+                        disabled
+                      />
                     )}
                   </div>
                 )}
@@ -754,27 +801,30 @@ export default function ApplicationForm(props) {
                       <div>{`Emergency Contact ${index + 1}`}</div>
                       <div>
                         <label>First Name:</label>
-                        <input value={oneEmergencyObject.firstName} disabled/>
+                        <input value={oneEmergencyObject.firstName} disabled />
                       </div>
                       <div>
                         <label>Last Name:</label>
-                        <input value={oneEmergencyObject.lastName} disabled/>
+                        <input value={oneEmergencyObject.lastName} disabled />
                       </div>
                       <div>
                         <label>Middle Name:</label>
-                        <input value={oneEmergencyObject.middleName} disabled/>
+                        <input value={oneEmergencyObject.middleName} disabled />
                       </div>
                       <div>
                         <label>phone:</label>
-                        <input value={oneEmergencyObject.phone} disabled/>
+                        <input value={oneEmergencyObject.phone} disabled />
                       </div>
                       <div>
                         <label>email:</label>
-                        <input value={oneEmergencyObject.email} disabled/>
+                        <input value={oneEmergencyObject.email} disabled />
                       </div>
                       <div>
                         <label>relationship:</label>
-                        <input value={oneEmergencyObject.relationship} disabled/>
+                        <input
+                          value={oneEmergencyObject.relationship}
+                          disabled
+                        />
                       </div>
                       <br></br>
                     </div>
@@ -783,11 +833,11 @@ export default function ApplicationForm(props) {
               )
             )}
 
-            <p>Uploaded Summary</p>
-            <div>
+            <div className={style.summary}>
+              <p>Uploaded Summary</p>
               {formik.values.profilePictureName ? (
                 <div>
-                  Profile picture:
+                  <label>Profile picture:</label>
                   <a
                     href={formik.values.profilePicture}
                     target="_blank"
@@ -803,7 +853,7 @@ export default function ApplicationForm(props) {
 
               {formik.values.driverLicenseName ? (
                 <div>
-                  Driver license:
+                  <label>Driver license:</label>
                   <a
                     href={formik.values.driverLicense}
                     target="_blank"
@@ -819,7 +869,7 @@ export default function ApplicationForm(props) {
 
               {formik.values.workAuthorizationName ? (
                 <div>
-                  Work authorization:
+                  <label>Work authorization:</label>
                   <a
                     href={formik.values.workAuthorization}
                     target="_blank"

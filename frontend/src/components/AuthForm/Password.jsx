@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
+import style from "./style.module.css";
 
 export default function Password(props) {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,8 +12,9 @@ export default function Password(props) {
   return (
     <div className="password-input">
       <label htmlFor="password">password</label>
-      <div>
+      <div className={style.passwordInput}>
         <input
+          className={style.input}
           type={showPassword ? "text" : "password"}
           id="password"
           onChange={(e) => props.handlePassword(e)}
@@ -20,7 +22,7 @@ export default function Password(props) {
           required
         />
         <button type="button" onClick={handleTogglePassword}>
-          <FontAwesomeIcon icon={faEye} />
+          <FontAwesomeIcon className={style.icon} icon={faEye} />
         </button>
       </div>
       <p style={{ color: "#FC5A44" }}>{props.warning}</p>
