@@ -11,3 +11,10 @@
                                             You may need to use a CSS preprocessor like SASS or LESS to use functions like "darken". 
                                             Otherwise, just specify a slightly darker gray color manually. */
 }
+
+.reviewContainer {
+    padding: 20px 20px 20px 20px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+}

@@ -1,0 +1,52 @@
+.registrationContainer {
+  padding: 10px 20px 20px 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.tableStyle {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.tableHeader {
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  vertical-align: middle;
+  background-color: #73a7bd;
+  color: white;
+}
+
+.tableCell {
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  vertical-align: middle;
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+.tableCell:nth-child(3) {
+  max-width: 200px; 
+  overflow-x: auto; 
+  white-space: nowrap; 
+}
+
+.rowHover:hover {
+  background-color: #f5f5f5;
+}
+
+.loadingState {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -69,7 +69,7 @@ export default function EmployeeProfile() {
                         </Badge>
                     </Col>
 
-                    <Col span={8} style={{ textAlign: 'center' }}>
+                    <Col span={8} style={{ textAlign: 'left' }}>
                         {filteredApplications.length === 0 ? 'No records found' : filteredApplications.length === 1 ? 'One record found' : `${filteredApplications.length} records found`}
                     </Col>
 

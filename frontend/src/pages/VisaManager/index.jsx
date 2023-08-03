@@ -22,8 +22,8 @@ export default function VisaManager() {
     return (
         <div className={style.visa_page}>
           <header className={style.visa_page_header}>
-            <button className={style.visa_page_button} onClick={() => setView("Inprogress")}>In Progress</button>
-            <button className={style.visa_page_button} onClick={() => setView("All")}>All</button>
+            <button className={`${style.visa_page_button} ${view === "Inprogress" ? style.visa_page_button_selected : ""}`} onClick={() => setView("Inprogress")}>In Progress</button>
+            <button className={`${style.visa_page_button} ${view === "All" ? style.visa_page_button_selected : ""}`} onClick={() => setView("All")}>All</button>
           </header>
           <main>
             {view === "Inprogress" ? (

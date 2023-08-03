@@ -5,15 +5,17 @@ import { Button, List, Radio } from "antd";
 import "./style.css";
 import { getAllApplicationAction } from "../../app/applicationSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Loading from "../../utils/Loading";
 
 const ApplicationReview = () => {
   const dispatch = useDispatch();
   const { applications } = useSelector((state) => state.applications);
   const [status, setStatus] = useState("pending");
   const [applicationsByState, setApplicationsByState] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(getAllApplicationAction());
+    dispatch(getAllApplicationAction()).then(setIsLoading(false));
   }, []);
 
   const handleStateChangeHandler = (e) => {
@@ -25,8 +27,10 @@ const ApplicationReview = () => {
     );
   };
 
-  return (
-    <div>
+  return isLoading ? (
+    <Loading />
+  ) : (
+    <div className="reviewContainer">
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Radio.Group
           onChange={handleStateChangeHandler}
@@ -43,30 +47,32 @@ const ApplicationReview = () => {
         dataSource={applicationsByState}
         renderItem={(item) => {
           // console.log(item.user);
-          return (<List.Item
-
-            actions={[
-              <Button
-                type="link"
-                href={`/${item.user}/application`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View Application
-              </Button>,
-            ]}
-          >
-            <List.Item.Meta
-              title={
-                item.firstName + (item.preferredName && "(" + item.preferredName + ") ") + item.middleName + " " + item.lastName
-              }
-              description={item.email}
-            />
-          </List.Item>)
-        }
-
-
-        }
+          return (
+            <List.Item
+              actions={[
+                <Button
+                  type="link"
+                  href={`/${item.user}/application`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Application
+                </Button>,
+              ]}
+            >
+              <List.Item.Meta
+                title={
+                  item.firstName +
+                  (item.preferredName && "(" + item.preferredName + ") ") +
+                  item.middleName +
+                  " " +
+                  item.lastName
+                }
+                description={item.email}
+              />
+            </List.Item>
+          );
+        }}
       />
     </div>
   );

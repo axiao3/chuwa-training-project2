@@ -7,9 +7,16 @@ import { updateApplicationAction, sendNotificationAction } from '../../app/visaS
 export default function ActionComponent(props) {
   const dispatch = useDispatch();
   const [feedback, setFeedback] = useState("");
+  const [feedbackError, setFeedbackError] = useState(false);
   const [reject, setReject] = useState(false);
 
   const handleOPTReceiptReject = () => {
+    if (feedback.trim() === "") {
+      setFeedbackError(true);
+      return;
+    } else {
+      setFeedbackError(false);
+    }
     const reject = { OPTReceiptStatus: "rejected", user: props.user_id, OPTReceiptFeedback: feedback }
     console.log(reject);
     dispatch(updateApplicationAction(reject)).then((action) => {
@@ -32,6 +39,12 @@ export default function ActionComponent(props) {
   }
 
   const handleOPTEADReject = () => {
+    if (feedback.trim() === "") {
+      setFeedbackError(true);
+      return;
+    } else {
+      setFeedbackError(false);
+    }
     const reject = { OPTEADStatus: "rejected", user: props.user_id, OPTEADFeedback: feedback }
     console.log(reject);
     dispatch(updateApplicationAction(reject)).then((action) => {
@@ -54,6 +67,12 @@ export default function ActionComponent(props) {
   }
 
   const handleI983Reject = () => {
+    if (feedback.trim() === "") {
+      setFeedbackError(true);
+      return;
+    } else {
+      setFeedbackError(false);
+    }
     const reject = { I983Status: "rejected", user: props.user_id, I983Feedback: feedback }
     console.log(reject);
     dispatch(updateApplicationAction(reject)).then((action) => {
@@ -76,6 +95,12 @@ export default function ActionComponent(props) {
   }
 
   const handleI20Reject = () => {
+    if (feedback.trim() === "") {
+      setFeedbackError(true);
+      return;
+    } else {
+      setFeedbackError(false);
+    }
     const reject = { I20Status: "rejected", user: props.user_id, I20Feedback: feedback }
     console.log(reject);
     dispatch(updateApplicationAction(reject)).then((action) => {
@@ -100,7 +125,7 @@ export default function ActionComponent(props) {
   const handleSendEmail = (email, type) => {
     console.log("email:", email);
     console.log("type:", type);
-    dispatch(sendNotificationAction({email, type})).then((action) => {
+    dispatch(sendNotificationAction({ email, type })).then((action) => {
       if (sendNotificationAction.fulfilled.match(action)) {
         alert("Send Notication Success!");
         window.location.href = `/visaHR`;
@@ -116,31 +141,36 @@ export default function ActionComponent(props) {
             <>
               <div className="required" style={{ color: "gray" }}>Provide Feedback</div>
               <textarea
+                required
                 rows="5"
                 style={{ fontFamily: 'Arial, sans-serif' }}
                 value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                required />
+                onChange={(e) => {
+                  setFeedback(e.target.value);
+                  if (feedbackError) setFeedbackError(false); // reset error state on change
+              }}
+              />
+              {feedbackError && <div style={{ color: 'red' }}>This field is required.</div>}
             </>}
 
           {!reject ?
             <div className="two_buttons">
-              <button className="form_button" type="button" onClick={handleOPTReceiptApprove}>Approve</button>
-              <button className="form_button" type="button" onClick={() => setReject(true)}>Reject</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={handleOPTReceiptApprove}>Approve</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => setReject(true)}>Reject</button>
             </div> :
             <div className="two_buttons">
-              <button className="form_button" type="button" onClick={handleOPTReceiptReject}>Confirm</button>
-              <button className="form_button" type="button" onClick={() => { setReject(false); setFeedback("") }}>Cancel</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={handleOPTReceiptReject}>Confirm</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => { setReject(false); setFeedback("") }}>Cancel</button>
             </div>}
         </div>
       )}
 
       {props.status === "resubmit OPT receipt" && (
-        <button className="form_button" type="button" onClick={() => handleSendEmail(props.email, "OPT Receipt")}>Send Notification</button>
+        <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => handleSendEmail(props.email, "OPT Receipt")}>Send Notification</button>
       )}
 
       {props.status === "submit OPT EAD" && (
-        <button className="form_button" type="button" onClick={() => handleSendEmail(props.email, "OPT EAD")}>Send Notification</button>
+        <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => handleSendEmail(props.email, "OPT EAD")}>Send Notification</button>
       )}
 
       {props.status === "wait for Approval OPT EAD" && (
@@ -149,31 +179,36 @@ export default function ActionComponent(props) {
             <>
               <div className="required" style={{ color: "gray" }}>Provide Feedback</div>
               <textarea
+                required
                 rows="5"
                 style={{ fontFamily: 'Arial, sans-serif' }}
                 value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                required />
+                onChange={(e) => {
+                  setFeedback(e.target.value);
+                  if (feedbackError) setFeedbackError(false); // reset error state on change
+              }}
+              />
+              {feedbackError && <div style={{ color: 'red' }}>This field is required.</div>}
             </>}
 
           {!reject ?
             <div className="two_buttons">
-              <button className="form_button" type="button" onClick={handleOPTEADApprove}>Approve</button>
-              <button className="form_button" type="button" onClick={() => setReject(true)}>Reject</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={handleOPTEADApprove}>Approve</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => setReject(true)}>Reject</button>
             </div> :
             <div className="two_buttons">
-              <button className="form_button" type="button" onClick={handleOPTEADReject}>Confirm</button>
-              <button className="form_button" type="button" onClick={() => { setReject(false); setFeedback("") }}>Cancel</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={handleOPTEADReject}>Confirm</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => { setReject(false); setFeedback("") }}>Cancel</button>
             </div>}
         </div>
       )}
 
       {props.status === "resubmit OPT EAD" && (
-        <button className="form_button" type="button" onClick={() => handleSendEmail(props.email, "OPT EAD")}>Send Notification</button>
+        <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => handleSendEmail(props.email, "OPT EAD")}>Send Notification</button>
       )}
 
       {props.status === "submit I983" && (
-        <button className="form_button" type="button" onClick={() => handleSendEmail(props.email, "I983")}>Send Notification</button>
+        <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => handleSendEmail(props.email, "I983")}>Send Notification</button>
       )}
 
       {props.status === "wait for Approval I983" && (
@@ -182,31 +217,36 @@ export default function ActionComponent(props) {
             <>
               <div className="required" style={{ color: "gray" }}>Provide Feedback</div>
               <textarea
+                required
                 rows="5"
                 style={{ fontFamily: 'Arial, sans-serif' }}
                 value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                required />
+                onChange={(e) => {
+                  setFeedback(e.target.value);
+                  if (feedbackError) setFeedbackError(false); // reset error state on change
+              }}
+              />
+              {feedbackError && <div style={{ color: 'red' }}>This field is required.</div>}
             </>}
 
           {!reject ?
             <div className="two_buttons">
-              <button className="form_button" type="button" onClick={handleI983Approve}>Approve</button>
-              <button className="form_button" type="button" onClick={() => setReject(true)}>Reject</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={handleI983Approve}>Approve</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => setReject(true)}>Reject</button>
             </div> :
             <div className="two_buttons">
-              <button className="form_button" type="button" onClick={handleI983Reject}>Confirm</button>
-              <button className="form_button" type="button" onClick={() => { setReject(false); setFeedback("") }}>Cancel</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={handleI983Reject}>Confirm</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => { setReject(false); setFeedback("") }}>Cancel</button>
             </div>}
         </div>
       )}
 
       {props.status === "resubmit I983" && (
-        <button className="form_button" type="button" onClick={() => handleSendEmail(props.email, "I983")}>Send Notification</button>
+        <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => handleSendEmail(props.email, "I983")}>Send Notification</button>
       )}
 
       {props.status === "submit I20" && (
-        <button className="form_button" type="button" onClick={() => handleSendEmail(props.email, "I20")}>Send Notification</button>
+        <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => handleSendEmail(props.email, "I20")}>Send Notification</button>
       )}
 
       {props.status === "wait for Approval I20" && (
@@ -215,27 +255,32 @@ export default function ActionComponent(props) {
             <>
               <div className="required" style={{ color: "gray" }}>Provide Feedback</div>
               <textarea
+                required
                 rows="5"
                 style={{ fontFamily: 'Arial, sans-serif' }}
                 value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                required />
+                onChange={(e) => {
+                  setFeedback(e.target.value);
+                  if (feedbackError) setFeedbackError(false); // reset error state on change
+              }}
+              />
+              {feedbackError && <div style={{ color: 'red' }}>This field is required.</div>}
             </>}
 
           {!reject ?
             <div className="two_buttons">
-              <button className="form_button" type="button" onClick={handleI20Approve}>Approve</button>
-              <button className="form_button" type="button" onClick={() => setReject(true)}>Reject</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={handleI20Approve}>Approve</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => setReject(true)}>Reject</button>
             </div> :
             <div className="two_buttons">
-              <button className="form_button" type="button" onClick={handleI20Reject}>Confirm</button>
-              <button className="form_button" type="button" onClick={() => { setReject(false); setFeedback("") }}>Cancel</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={handleI20Reject}>Confirm</button>
+              <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => { setReject(false); setFeedback("") }}>Cancel</button>
             </div>}
         </div>
       )}
 
       {props.status === "resubmit I20" && (
-        <button className="form_button" type="button" onClick={() => handleSendEmail(props.email, "I20")}>Send Notification</button>
+        <button style={{ fontWeight: "bold" }} className="form_button" type="button" onClick={() => handleSendEmail(props.email, "I20")}>Send Notification</button>
       )}
 
     </div>

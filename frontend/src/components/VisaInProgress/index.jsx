@@ -113,7 +113,7 @@ export default function VisaInProgress() {
                             <div style={{ flex: 1 }}>{(item.startDate && item.endDate) && remains(item.startDate, item.endDate)}</div>
                             <div style={{ flex: 1 }}>{nextStep(item)}</div>
                             <div style={{ flex: 1, textAlign: "center" }}>
-                                <ActionComponent status={nextStep(item)} user_id={item.user} email={item.email}/>
+                                <ActionComponent status={nextStep(item)} user_id={item.user} email={item.email} />
                             </div>
                             {/* <div style={{ flex: 1 }}>{nextStep(item)}</div> */}
                         </div>

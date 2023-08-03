@@ -21,20 +21,26 @@ export default function HiringManagement() {
     }
   }, []);
 
-  const [view, setView] = useState('history'); // 'history' or 'another'
+  const [view, setView] = useState("history"); // 'history' or 'another'
 
   return (
     <div className={style.hiring_page}>
       <header className={style.hiring_page_header}>
-        <button className={style.hiring_page_button} onClick={() => setView("history")}>Registration History</button>
-        <button className={style.hiring_page_button} onClick={() => setView("another")}>Application Review</button>
+        <button
+          className={`${style.hiring_page_button} ${view === "history" ? style.active : ""}`}
+          onClick={() => setView("history")}
+        >
+          Registration History
+        </button>
+        <button
+          className={`${style.hiring_page_button} ${view === "another" ? style.active : ""}`}
+          onClick={() => setView("another")}
+        >
+          Application Review
+        </button>
       </header>
       <main>
-        {view === "history" ? (
-          <RegistrationHistory />
-        ) : (
-          <ApplicationReview />
-        )}
+        {view === "history" ? <RegistrationHistory /> : <ApplicationReview />}
       </main>
     </div>
   );

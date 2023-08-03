@@ -1,26 +1,33 @@
 .hiring_page {
-    font-family: Arial, sans-serif;
-    margin: 2rem;
-  }
-  
-.hiring_page_header {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  
-.hiring_page_button {
-    padding: 0.5rem 1rem;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-.hiring_page_button:hover {
-    background-color: #0056b3;
-  }
-  
+  font-family: Arial, sans-serif;
+  margin: 2rem;
+  min-height: 100vh;
+}
 
-  
+.hiring_page_header {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.hiring_page_button {
+  padding: 10px 20px;
+  /* background-color: #007bff; */
+  background-color: rgb(224, 235, 241);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  color: rgb(74, 68, 68);
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  border-radius: 5px;
+}
+
+.hiring_page_button:hover {
+  background-color: #0056b3;
+}
+
+.hiring_page_button.active {
+  background-color: #007bff;
+  color: white;
+}

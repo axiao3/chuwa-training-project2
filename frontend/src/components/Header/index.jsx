@@ -11,31 +11,20 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 // import { fetchCartAction } from "../../app/cartSlice";
 import { logOutUser } from "../../app/userSlice";
-import { getApplicationByIdAction } from "../../app/applicationSlice";
 
 export default function Header(props) {
   const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector((state) => state.user);
-  const { id } = user;
   const [NavOpen, setNavOpen] = useState(false);
   const [productName, setProductName] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/signin");
-    } else {
-      if (user.type === "employee") {
-        dispatch(getApplicationByIdAction({ id }));
-      }
-    }
-  }, [isAuthenticated]);
+  // useEffect(() => {
+  //   if (Object.keys(user).length > 0) {
+  //     dispatch(fetchCartAction());
+  //   }
+  // }, []);
 
-  const application = useSelector(
-    (state) => state.applications.applications[0]
-  );
-  console.log("app in nav: ", application);
   const handleSignIn = () => {
     window.location.href = "/signin";
   };
@@ -49,21 +38,6 @@ export default function Header(props) {
     e.preventDefault();
     // navigate(`/items?name=${productName}`);
     // window.location.href = `/items?name=${productName}`;
-  };
-
-  const handlePersonalInfoClick = () => {
-    if (
-      user.type === "employee" &&
-      application?.submittedStatus === "approved"
-    ) {
-      console.log("application is approved, can enter the personal info");
-      navigate(`/employees/${id}`);
-    } else {
-      console.log(
-        "application is not approved, cannot enter the personal info"
-      );
-      navigate(`/${id}/application`);
-    }
   };
 
   return (
@@ -83,7 +57,16 @@ export default function Header(props) {
             Chuwa
           </span>
         </p>
-
+        <form className="nav-item" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+          />
+          <button type="submit">
+            <FontAwesomeIcon icon={faSearch} />
+          </button>
+        </form>
         <div className="nav-item">
           {isAuthenticated ? (
             <button onClick={handleLogOut}>
@@ -101,35 +84,12 @@ export default function Header(props) {
             </button>
           )}
 
-          {isAuthenticated ? (
-            <div className="nav-menu">
-              {user.type === "employee" ? (
-                <>
-                  <button onClick={handlePersonalInfoClick}>
-                    Personal Information
-                  </button>
-                  <button onClick={() => navigate(`/employees/${id}/visa`)}>
-                    Visa Status Management
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button onClick={() => navigate("/home")}>Home</button>
-                  <button onClick={() => navigate("/employees")}>
-                    Employee Profiles
-                  </button>
-                  <button onClick={() => navigate("/visaHR")}>
-                    Visa Status Management
-                  </button>
-                  <button onClick={() => navigate(`/employees/${id}/hiring`)}>
-                    Hiring Management
-                  </button>
-                </>
-              )}
-            </div>
-          ) : null}
+          {/* {isAuthenticated ? ( //and is hr?
+            <button>Menu</button>
+          ) : null} */}
         </div>
       </nav>
+      {/* {cartOpen ? <Cart setCartOpen={handleCart} /> : null} */}
     </header>
   );
 }

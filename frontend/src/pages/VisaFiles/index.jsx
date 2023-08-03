@@ -68,26 +68,26 @@ export default function VisaFiles() {
         return (
             <Card className="card-container" title={title} style={{ marginBottom: '20px' }}>
                 <div className="card-content">
-                    {/* <div className="field-container">
-                    <label className="field-label">Name:</label>
-                    <span className="field-value">{firstName + " (" + preferredName + ") " + middleName + " " + lastName}</span>
-                    </div> */}
-                    {fields.map((field, index) => (
-                        <div key={index} className="field-container">
-                            <label className="field-label">{field.label}:</label>
+                    {fields.length !== 0 ?
+                        <>
+                            {fields.map((field, index) => (
+                                <div key={index} className="field-container">
+                                    <label className="field-label">{field.label}:</label>
 
-                            <a className="field-value"
-                                href={field.value}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{ textDecoration: "none" }}
-                            >
-                                <button type="button">
-                                    {field.fileName}
-                                </button>
-                            </a>
-                        </div>
-                    ))}
+                                    <a className="field-value"
+                                        href={field.value}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ textDecoration: "none" }}
+                                    >
+                                        <button type="button">
+                                            {field.fileName}
+                                        </button>
+                                    </a>
+                                </div>
+                            ))}</> : "N/A"
+                    }
+
                 </div>
             </Card>
         )

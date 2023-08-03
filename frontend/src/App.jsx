@@ -19,16 +19,16 @@ import VisaFiles from "./pages/VisaFiles";
 
 function App() {
   return (
-      <div className="app">
-        <Router>
-          <Header />
-          <div className="app-content">
-            <Routes>
-              <Route path="/" element={<MainLayout />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/signup" element={<Register />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/:id/application" element={<Application />} />
+    <div className="app">
+      <Router>
+        <Header />
+        <div className="app-content">
+          <Routes>
+            <Route path="/" element={<MainLayout />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/signup" element={<Register />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/:id/application" element={<Application />} />
 
               {/* reuse auth */}
               <Route path="/employees" element={<EmployeeProfile />} />
