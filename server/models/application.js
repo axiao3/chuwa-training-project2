@@ -57,6 +57,7 @@ const applicationSchema = new mongoose.Schema({
   I20: { type: String, default: "" },
   I20Name: { type: String, default: "" },
   submittedStatus: { type: String, default: "pending" },
+  obboardingFeedback: { type: String, default: "" },
 });
 
 const Application = mongoose.model("Application", applicationSchema);

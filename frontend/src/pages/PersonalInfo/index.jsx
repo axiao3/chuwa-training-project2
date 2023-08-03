@@ -23,7 +23,7 @@ export default function PersonalInformation() {
         dispatch(getApplicationByIdAction({ id }));
       } else {
         if (user.applicationStatus !== "approved") {
-          window.location.href = "/application";
+          window.location.href = `/${id}/application`;
         } else {
           dispatch(getApplicationByIdAction({ id }));
         }
