@@ -14,7 +14,7 @@ export default function VisaManagement() {
 
   const navigate = useNavigate();
   const { user, isAuthenticated } = useSelector((state) => state.user);
-
+  const application = useSelector((state) => state.applications);
   const { id } = user;
 
   useEffect(() => {
@@ -33,10 +33,8 @@ export default function VisaManagement() {
       }
     }
   }, []);
-  const application = useSelector(
-    (state) => state.applications.applications[0]
-  );
-  console.log("app in visa: ", application);
+
+  // console.log("app in visa: ", application);
   const [currentVisa, setCurrentVisa] = useState("OPT Receipt");
   if (
     application?.submittedStatus === "approved" &&

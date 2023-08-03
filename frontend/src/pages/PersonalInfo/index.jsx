@@ -133,7 +133,10 @@ export default function PersonalInformation() {
   }));
 
   return (
-    application && (
+    application &&
+    (isLoading ? (
+      <Loading />
+    ) : (
       <div>
         <InfoSection
           usertype={user.type}
@@ -377,6 +380,6 @@ export default function PersonalInformation() {
           onSave={handleSaveChanges}
         />
       </div>
-    )
+    ))
   );
 }

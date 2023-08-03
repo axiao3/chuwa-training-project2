@@ -30,7 +30,7 @@ export default function Header(props) {
         dispatch(getApplicationByIdAction({ id }));
       }
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const application = useSelector(
     (state) => state.applications.applications[0]
