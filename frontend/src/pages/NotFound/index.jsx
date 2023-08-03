@@ -10,7 +10,7 @@ export default function NotFound() {
       title="404"
       subTitle="Sorry, the page you visited does not exist."
       extra={
-        <Link to="/">
+        <Link to="/home">
           <Button type="primary" size="large">
             Back Home
           </Button>

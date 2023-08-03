@@ -4,7 +4,7 @@ const apiUrl = "http://localhost:8080/hiring";
 export function getRegistrationHistory() {
   return new Promise((resolve, reject) => {
     axios
-      .get(apiUrl, {
+      .get(`${apiUrl}/token`, {
         headers: {
           Authorization: localStorage.getItem("token"),
         },
@@ -18,3 +18,4 @@ export function getRegistrationHistory() {
       });
   });
 }
+

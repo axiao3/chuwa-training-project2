@@ -8,6 +8,7 @@
 .app-content {
   /* min-height: calc(100vh - 48px - 64px); */
   height: max-content;
+  /* height: 100%; */
   width: 100%;
   filter: brightness(1);
   transition: filter 0.2s ease-in-out;

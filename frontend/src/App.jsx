@@ -10,10 +10,12 @@ import ErrorPage from "./pages/ErrorPage";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import Home from "./pages/Home";
-// import EmployeeProfiles from "./pages/employeeProfiles";
 import PersonalInformation from "./pages/PersonalInfo";
 import HiringManagement from "./pages/HiringManagement";
 import EmployeeProfile from "./pages/EmployeeProfile";
+import VisaManager from "./pages/VisaManager";
+import VisaEmployee from "./pages/VisaEmployee";
+import VisaFiles from "./pages/VisaFiles";
 
 function App() {
   return (
@@ -30,19 +32,13 @@ function App() {
 
               {/* reuse auth */}
               <Route path="/employees" element={<EmployeeProfile />} />
-              <Route
-                path="/employees/:id/visaHR"
-                element={<>Visa Status Management page for HR: sort & search</>}
-              />
+              <Route exact path="/visaHR" element={<VisaManager />}/>
               <Route path="/employees/:id/hiring" element={<HiringManagement />} />
               {/*HR↑ Employee↓*/}
 
               <Route path="/employees/:id" element={<PersonalInformation />} />
-              <Route
-                path="/employees/:id/visa"
-                element={<>visa Status Management for employee</>}
-              />
-              {/* <Route path="/error" element={<ErrorPage />} /> */}
+              <Route path="/employees/:id/visa" element={<VisaEmployee />} />
+              <Route path="/employees/:id/files" element={<VisaFiles />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

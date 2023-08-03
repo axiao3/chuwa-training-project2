@@ -6,7 +6,7 @@ const applicationSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   middleName: { type: String },
   preferredName: { type: String },
-  profilePicture: {type: String},
+
   streetName: { type: String, required: true },
   apt: { type: String, required: true },
   city: { type: String, required: true },
@@ -29,12 +29,6 @@ const applicationSchema = new mongoose.Schema({
   referencePhone: { type: String },
   referenceEmail: { type: String },
   referenceRelationship: { type: String, required: true },
-  // emergencyFirstName: { type: String, required: true },
-  // emergencyLastName: { type: String, required: true },
-  // emergencyMiddleName: { type: String },
-  // emergencyPhone: { type: String },
-  // emergencyEmail: { type: String },
-  // emergencyRelationship: { type: String, required: true },
   emergencyContacts: [
     {
       firstName: { type: String, required: true }, //require
@@ -45,13 +39,28 @@ const applicationSchema = new mongoose.Schema({
       relationship: { type: String, required: true }, //require
     },
   ],
+  profilePicture: {type: String},
   profilePictureName: { type: String },
   driverLicense: { type: String },
   driverLicenseName: { type: String },
   workAuthorization: { type: String },
   workAuthorizationName: { type: String },
+  OPTReceiptStatus: { type: String, default: "pending" },
+  OPTReceiptFeedback: { type: String, default: "" },
   submittedStatus: { type: String, default: "pending" },
   obboardingFeedback: { type: String, default: "" },
+  OPTEAD: { type: String, default: "" },
+  OPTEADName: { type: String, default: "" },
+  OPTEADStatus: { type: String, default: "" },
+  OPTEADFeedback: { type: String, default: "" },
+  I983: { type: String, default: "" },
+  I983Name: { type: String, default: "" },
+  I983Status: { type: String, default: "" },
+  I983Feedback: { type: String, default: "" },
+  I20: { type: String, default: "" },
+  I20Name: { type: String, default: "" },
+  I20Status: { type: String, default: "" },
+  I20Feedback: { type: String, default: "" },
 });
 
 const Application = mongoose.model('Application', applicationSchema);

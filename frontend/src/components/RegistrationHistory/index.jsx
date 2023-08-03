@@ -25,7 +25,7 @@ export default function RegistrationHistory() {
             <thead>
               <tr>
                 <th>Email Address</th>
-                <th>Person's Name</th>
+                <th>Username</th>
                 <th>Registration Link</th>
                 <th>Is Submitted</th>
               </tr>

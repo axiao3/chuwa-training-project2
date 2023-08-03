@@ -1,0 +1,26 @@
+.visa_page {
+    font-family: Arial, sans-serif;
+    margin: 2rem;
+  }
+  
+.visa_page_header {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+.visa_page_button {
+    padding: 0.5rem 1rem;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 20%;
+  }
+  
+.visa_page_button:hover {
+    background-color: #0056b3;
+  }
+  

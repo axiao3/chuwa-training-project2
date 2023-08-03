@@ -30,6 +30,29 @@ export default function PersonalInformation() {
   }, []);
 
   const application = useSelector((state) => state.applications.applications[0]);
+  const [fields, setFields] = useState([]);
+  useEffect(() => {
+    // if (application.driverLicense) {
+    //   setFields((prev) => prev.push({ key: 'driverLicense', label: 'driver license', value: application.driverLicense, 
+    //   fileName: application.driverLicenseName, inputType: 'file', name: "driverLicenseName" }))
+    // }    
+    // if (application.workAuthorization) {
+    //   setFields((prev) => prev.push({ key: 'workAuthorization', label: 'work authorization', value: application.workAuthorization, 
+    //   fileName: application.workAuthorizationName, inputType: 'file', name: "workAuthorizationName" }))
+    // }
+    // if (application.workAuthorization) {
+    //   setFields((prev) => prev.push({ key: 'workAuthorization', label: 'work authorization', value: application.workAuthorization, 
+    //   fileName: application.workAuthorizationName, inputType: 'file', name: "workAuthorizationName" }))
+    // }
+    // if (application.workAuthorization) {
+    //   setFields((prev) => prev.push({ key: 'workAuthorization', label: 'work authorization', value: application.workAuthorization, 
+    //   fileName: application.workAuthorizationName, inputType: 'file', name: "workAuthorizationName" }))
+    // }    
+    // if (application.workAuthorization) {
+    //   setFields((prev) => prev.push({ key: 'workAuthorization', label: 'work authorization', value: application.workAuthorization, 
+    //   fileName: application.workAuthorizationName, inputType: 'file', name: "workAuthorizationName" }))
+    // }
+  }, [application])
 
   const handleSaveChanges = (changes) => {
     changes.user = id;
@@ -98,7 +121,7 @@ export default function PersonalInformation() {
       onSave={handleSaveChanges}
     />
     <InfoSection
-    usertype={user.type}
+      usertype={user.type}
       title="Address"
       fields={[
         { key: 'apt', label: 'Building/apt #,', value: application.apt, inputType: 'text' },
@@ -110,7 +133,7 @@ export default function PersonalInformation() {
       onSave={handleSaveChanges}
     />
     <InfoSection
-    usertype={user.type}
+      usertype={user.type}
       title="Contact Info"
       fields={[
         { key: 'cellphone', label: 'Cell phone number', value: application.cellphone, inputType: 'text' },
@@ -120,7 +143,7 @@ export default function PersonalInformation() {
       onSave={handleSaveChanges}
     />
     <InfoSection
-    usertype={user.type}
+      usertype={user.type}
       title="Employment"
       fields={[
         { key: 'authorizationType', label: 'Visa title', value: application.authorizationType !== "Other" ? application.authorizationType : application.otherVisaTitle, inputType: 'select', options: [{ value: 'H1-B', label: 'H1-B' }, { value: 'L2', label: 'L2' }, { value: 'F1(CPT/OPT)', label: 'F1(CPT/OPT)' }, { value: 'H4', label: 'H4' }, { value: 'Other', label: 'Other' }] },
@@ -150,7 +173,7 @@ export default function PersonalInformation() {
     })}
 
     <InfoSectionForDocuments
-    usertype={user.type}
+      usertype={user.type}
       title="Documents"
       fields={[
         { key: 'driverLicense', label: 'driver license', value: application.driverLicense, fileName: application.driverLicenseName, inputType: 'file', name: "driverLicenseName" },
