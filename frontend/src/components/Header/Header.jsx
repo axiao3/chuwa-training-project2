@@ -108,7 +108,7 @@ export default function Header(props) {
                   <button onClick={handlePersonalInfoClick}>
                     Personal Information
                   </button>
-                  <button onClick={() => navigate("/employees/visa")}>
+                  <button onClick={() => navigate(`/employees/${id}/visa`)}>
                     Visa Status Management
                   </button>
                 </>
@@ -118,10 +118,10 @@ export default function Header(props) {
                   <button onClick={() => navigate("/employees")}>
                     Employee Profiles
                   </button>
-                  <button onClick={() => navigate("/employees/visa")}>
+                  <button onClick={() => navigate("/visaHR")}>
                     Visa Status Management
                   </button>
-                  <button onClick={() => navigate("/employees/:id/hiring")}>
+                  <button onClick={() => navigate(`/employees/${id}/hiring`)}>
                     Hiring Management
                   </button>
                 </>
