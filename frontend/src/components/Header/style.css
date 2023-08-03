@@ -58,9 +58,10 @@ nav div button > * {
   margin: 0 0.25rem;
 }
 
-/* nav div > * {
-  margin: 0 0.2rem;
-} */
+.nav_menu {
+  display: flex;
+  justify-content: center;
+}
 
 nav p {
   white-space: nowrap;

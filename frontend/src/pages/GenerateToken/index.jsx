@@ -35,7 +35,9 @@ export default function GenerateToken() {
         </div>
       ) : (
         <div className={style.container}>
+          
           <p className={style.title}>
+          
             Registration Link already sent to your Email!
           </p>
         </div>

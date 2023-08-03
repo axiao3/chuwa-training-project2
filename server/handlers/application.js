@@ -7,19 +7,34 @@ exports.createApplication = async function (req, res, next) {
     console.log("data: ", req.body);
 
     const { workAuthorization, profilePicture, driverLicense } = req.body;
-    const profilePictureUrl = profilePicture
-      ? await uploadToS3(profilePicture)
-      : "";
-    const workAuthorizationUrl = workAuthorization
-      ? await uploadToS3(workAuthorization)
-      : "";
-    const driverLicenseUrl = driverLicense
-      ? await uploadToS3(driverLicense)
-      : "";
+    
+    if (workAuthorization && workAuthorization.slice(0, 4) === "data") {
+      const workAuthorizationUrl = await uploadToS3(workAuthorization);
+      req.body.workAuthorization = workAuthorizationUrl;
+    }
 
-    req.body.profilePicture = profilePictureUrl;
-    req.body.workAuthorization = workAuthorizationUrl;
-    req.body.driverLicense = driverLicenseUrl;
+    if (profilePicture && profilePicture.slice(0, 4) === "data") {
+      const profilePictureUrl = await uploadToS3(profilePicture);
+      req.body.profilePicture = profilePictureUrl;
+    }
+    if (driverLicense && driverLicense.slice(0, 4) === "data") {
+      const driverLicenseUrl = await uploadToS3(driverLicense);
+      req.body.driverLicense = driverLicenseUrl;
+    }
+
+    // const profilePictureUrl = profilePicture
+    //   ? await uploadToS3(profilePicture)
+    //   : "";
+    // const workAuthorizationUrl = workAuthorization
+    //   ? await uploadToS3(workAuthorization)
+    //   : "";
+    // const driverLicenseUrl = driverLicense
+    //   ? await uploadToS3(driverLicense)
+    //   : "";
+
+    // req.body.profilePicture = profilePictureUrl;
+    // req.body.workAuthorization = workAuthorizationUrl;
+    // req.body.driverLicense = driverLicenseUrl;
 
     const item = await Application.create(req.body);
 

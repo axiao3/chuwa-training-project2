@@ -26,6 +26,12 @@ label {
   border-radius: 4px;
   cursor: pointer;
 }
+
+.button_container {
+  display: flex;
+  justify-content: center;
+}
+
 .icon {
   background: none;
   border: none;

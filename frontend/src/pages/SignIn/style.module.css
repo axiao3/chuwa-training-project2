@@ -2,7 +2,8 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  min-height: 100vh;
+  /* min-height: calc(100vh - 48px - 64px); */
+  min-height: 82vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -22,13 +23,14 @@ input[type="password"] {
 }
 
 .container button {
+  font-size: 18px;
   padding: 5px;
   background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  width: 10%;
+  width: 20%;
 }
 
 .container label {

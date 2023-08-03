@@ -8,7 +8,7 @@ import { signUpAction } from "../../app/userSlice";
 import { isTokenValid } from "../../services/auth";
 import Loading from "../../utils/Loading";
 import waiting from "../../utils/waiting";
-import style from "./style.module.css";
+import styles from "./styles.module.css"
 
 export default function SignUp({ token }) {
   const navigate = useNavigate();
@@ -65,15 +65,15 @@ export default function SignUp({ token }) {
       {isLoading ? (
         <Loading />
       ) : tokenResponse && tokenResponse.status ? (
-        <div className={style.container}>
-          <p className={style.title}>Sign up an account</p>
+        <div className={styles.container}>
+          <p className={styles.title}>Sign up an account</p>
           <AuthForm type="Sign Up" onSubmit={handleSubmit} />
           <p>
             Already had an account? <Link to="/signin">Sign In</Link>
           </p>
         </div>
       ) : (
-        <div className={style.container}>
+        <div className={styles.container}>
           <p>{tokenError}</p>
         </div>
       )}

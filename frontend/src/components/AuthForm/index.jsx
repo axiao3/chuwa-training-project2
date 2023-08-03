@@ -29,7 +29,7 @@ export default function AuthForm({ type, onSubmit }) {
 
   const handleEmailBlur = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setEmailWarning(!email ||!emailRegex.test(email) ? "Invalid Email input!" : null);
+    setEmailWarning(!email || !emailRegex.test(email) ? "Invalid Email input!" : null);
     setEmailWarning(
       !email || !emailRegex.test(email) ? "Invalid Email input!" : null
     );
@@ -115,13 +115,15 @@ export default function AuthForm({ type, onSubmit }) {
         </p>
       ) : null}
 
-      <button type="submit">
-        {type === "Generate Token"
-          ? "Generate token and send email"
-          : type === "Sign Up"
-          ? "Sign Up"
-          : "Sign In"}
-      </button>
+      <div className={styles.button_container}>
+        <button type="submit" >
+          {type === "Generate Token"
+            ? "Generate token and send email"
+            : type === "Sign Up"
+              ? "Sign Up"
+              : "Sign In"}
+        </button>
+      </div>
     </form>
   );
 }

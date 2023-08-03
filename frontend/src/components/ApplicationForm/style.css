@@ -10,10 +10,18 @@
   flex-direction: column;
 }
 
+.Form input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 97%;
+}
+
 /* For the individual sections */
 .Form > div {
   margin-bottom: 20px;
-  margin-left: 5%;
+  /* margin-left: 5%; */
 }
 
 /* For the section titles */
@@ -120,4 +128,3 @@ button {
 button:hover {
   background-color: #0056b3;
 } */
-

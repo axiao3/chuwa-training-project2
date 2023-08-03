@@ -1,5 +1,6 @@
 footer {
-  height: 64px;
+  /* height: 64px; */
+  min-height: 8vh;
   width: 100%;
   padding: 0px 64px;
   background: var(--var-primary-color);

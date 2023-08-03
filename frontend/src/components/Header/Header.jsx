@@ -22,20 +22,21 @@ export default function Header(props) {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/signin");
-    } else {
-      if (user.type === "employee") {
-        dispatch(getApplicationByIdAction({ id }));
-      }
-    }
-  }, [isAuthenticated]);
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     navigate("/signin");
+  //   } else {
+  //     if (user.type === "employee") {
+  //       dispatch(getApplicationByIdAction({ id }));
+  //     }
+  //   }
+  // }, [isAuthenticated]);
 
-  const application = useSelector(
-    (state) => state.applications.applications[0]
-  );
-  console.log("app in nav: ", application);
+  // const application = useSelector(
+  //   (state) => state.applications.applications[0]
+  // );
+  // console.log("app in nav: ", application);
+
   const handleSignIn = () => {
     window.location.href = "/signin";
   };
@@ -45,26 +46,21 @@ export default function Header(props) {
     window.location.href = "/signin";
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // navigate(`/items?name=${productName}`);
-    // window.location.href = `/items?name=${productName}`;
-  };
 
-  const handlePersonalInfoClick = () => {
-    if (
-      user.type === "employee" &&
-      application?.submittedStatus === "approved"
-    ) {
-      console.log("application is approved, can enter the personal info");
-      navigate(`/employees/${id}`);
-    } else {
-      console.log(
-        "application is not approved, cannot enter the personal info"
-      );
-      navigate(`/${id}/application`);
-    }
-  };
+  // const handlePersonalInfoClick = () => {
+  //   if (
+  //     user.type === "employee" &&
+  //     application?.submittedStatus === "approved"
+  //   ) {
+  //     console.log("application is approved, can enter the personal info");
+  //     navigate(`/employees/${id}`);
+  //   } else {
+  //     console.log(
+  //       "application is not approved, cannot enter the personal info"
+  //     );
+  //     navigate(`/${id}/application`);
+  //   }
+  // };
 
   return (
     <header>
@@ -78,13 +74,43 @@ export default function Header(props) {
             fontSize: "1.5rem",
           }}
         >
-          M<span className="hidden">anagement</span>
+          E<span className="hidden">mployee</span>
           <span style={{ marginLeft: "0.2rem", fontSize: "0.8rem" }}>
-            Chuwa
+            Management
           </span>
         </p>
 
         <div className="nav-item">
+
+
+        {isAuthenticated ? (
+            <div className="nav-menu">
+              {user.type === "employee" ? (
+                <>
+                  <button onClick={() => navigate(`/employees/${id}`)}>
+                    Personal Information
+                  </button>
+                  <button onClick={() => navigate(`/employees/${id}/visa`)}>
+                    Visa Status Management
+                  </button>
+                </>
+              ) : (
+                < >
+                  {/* <button onClick={() => navigate("/home")}>Home</button> */}
+                  <button onClick={() => navigate("/employees")}>
+                    Employee Profiles
+                  </button>
+                  <button onClick={() => navigate("/visaHR")}>
+                    Visa Status Management
+                  </button>
+                  <button onClick={() => navigate(`/employees/${id}/hiring`)}>
+                    Hiring Management
+                  </button>
+                </>
+              )}
+            </div>
+          ) : null}
+
           {isAuthenticated ? (
             <button onClick={handleLogOut}>
               <FontAwesomeIcon icon={faUser} />
@@ -101,33 +127,7 @@ export default function Header(props) {
             </button>
           )}
 
-          {isAuthenticated ? (
-            <div className="nav-menu">
-              {user.type === "employee" ? (
-                <>
-                  <button onClick={handlePersonalInfoClick}>
-                    Personal Information
-                  </button>
-                  <button onClick={() => navigate(`/employees/${id}/visa`)}>
-                    Visa Status Management
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button onClick={() => navigate("/home")}>Home</button>
-                  <button onClick={() => navigate("/employees")}>
-                    Employee Profiles
-                  </button>
-                  <button onClick={() => navigate("/visaHR")}>
-                    Visa Status Management
-                  </button>
-                  <button onClick={() => navigate(`/employees/${id}/hiring`)}>
-                    Hiring Management
-                  </button>
-                </>
-              )}
-            </div>
-          ) : null}
+
         </div>
       </nav>
     </header>
