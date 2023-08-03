@@ -5,9 +5,9 @@
   flex-direction: column;
 }
 
-.app-content {
+body .app-content {
   /* min-height: calc(100vh - 48px - 64px); */
-  height: max-content;
+  min-height: 100vh;
   width: 100%;
   filter: brightness(1);
   transition: filter 0.2s ease-in-out;
@@ -22,4 +22,3 @@ header {
   z-index: 999;
   margin: 0;
 }
-

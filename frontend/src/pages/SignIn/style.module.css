@@ -1,12 +1,12 @@
-/* .container {
+.container {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-} */
+}
 
 .title {
   font-size: 24px;
@@ -15,11 +15,11 @@
   margin-bottom: 20px;
 }
 
-/* input[type="password"] {
+input[type="password"] {
   padding: 10px;
   border-color: #ccc;
   border-radius: 4px;
-} */
+}
 
 .container button {
   padding: 5px;
@@ -31,12 +31,10 @@
   width: 10%;
 }
 
-/* Label styles */
 .container label {
   margin-bottom: 15px;
 }
 
-/* Responsive styles for small screens */
 @media screen and (max-width: 480px) {
   .container {
     padding: 10px;
@@ -51,12 +49,12 @@
     width: auto;
   }
 
-  /* input {
+  input {
     width: 80%;
   }
   input [type="password"] {
     width: 60%;
-  } */
+  }
 
   p {
     display: flex;

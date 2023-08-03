@@ -7,6 +7,7 @@ import {
   updateApplicationAction,
 } from "../../app/applicationSlice";
 import InfoSectionForDocuments from "../../components/InfoSection/InfoSectionForDocuments";
+import style from "./style.module.css";
 
 export default function VisaManagement() {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ export default function VisaManagement() {
   };
 
   return (
-    <div>
+    <div className={style.container}>
       <h2>Visa Status Management</h2>
       {user.type === "employee" ? (
         <div>

@@ -11,7 +11,7 @@ export default function Password(props) {
   const handleTogglePassword = () => setShowPassword(!showPassword);
   return (
     <div className="password-input">
-      <label htmlFor="password">password</label>
+      <label htmlFor="password">Password</label>
       <div className={style.passwordInput}>
         <input
           className={style.input}
