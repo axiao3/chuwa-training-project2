@@ -11,21 +11,31 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 // import { fetchCartAction } from "../../app/cartSlice";
 import { logOutUser } from "../../app/userSlice";
+import { getApplicationByIdAction } from "../../app/applicationSlice";
 
 export default function Header(props) {
   const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector((state) => state.user);
+  const { id } = user;
   const [NavOpen, setNavOpen] = useState(false);
   const [productName, setProductName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (Object.keys(user).length > 0) {
-  //     dispatch(fetchCartAction());
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/signin");
+    } else {
+      if (user.type === "employee") {
+        dispatch(getApplicationByIdAction({ id }));
+      }
+    }
+  }, []);
 
+  const application = useSelector(
+    (state) => state.applications.applications[0]
+  );
+  console.log("app in nav: ", application);
   const handleSignIn = () => {
     window.location.href = "/signin";
   };
@@ -39,6 +49,21 @@ export default function Header(props) {
     e.preventDefault();
     // navigate(`/items?name=${productName}`);
     // window.location.href = `/items?name=${productName}`;
+  };
+
+  const handlePersonalInfoClick = () => {
+    if (
+      user.type === "employee" &&
+      application?.submittedStatus === "approved"
+    ) {
+      console.log("application is approved, can enter the personal info");
+      navigate(`/employees/${id}`);
+    } else {
+      console.log(
+        "application is not approved, cannot enter the personal info"
+      );
+      navigate(`/${id}/application`);
+    }
   };
 
   return (
@@ -80,7 +105,7 @@ export default function Header(props) {
             <div className="nav-menu">
               {user.type === "employee" ? (
                 <>
-                  <button onClick={() => navigate("/employees/:id")}>
+                  <button onClick={handlePersonalInfoClick}>
                     Personal Information
                   </button>
                   <button onClick={() => navigate("/employees/visa")}>
