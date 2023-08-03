@@ -81,7 +81,12 @@ exports.updateApplicationById = async function (req, res, next) {
       req.body.driverLicense = driverLicenseUrl;
     }
 
-    if (req.body.submittedStatus !== "approved") {
+    const employeeId = req.params.id;
+    if (req.body.submittedStatus !== "pending") {
+      console.log("req.body.submittedStatus", req.body.submittedStatus);
+      const foundUser = await db.User.findById(employeeId);
+      foundUser.applicationStatus = "pending";
+      await foundUser.save();
       req.body.submittedStatus = "pending";
     } else {
       const foundUser = await db.User.findById(employeeId);
@@ -111,7 +116,6 @@ exports.updateApplicationById = async function (req, res, next) {
 };
 
 const uploadToS3 = (base64Data) => {
-  console.log("base64data in upload to s3", base64Data, typeof base64Data);
   const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,

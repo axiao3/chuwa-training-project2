@@ -17,6 +17,7 @@ export default function Header(props) {
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const [NavOpen, setNavOpen] = useState(false);
   const [productName, setProductName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   // useEffect(() => {

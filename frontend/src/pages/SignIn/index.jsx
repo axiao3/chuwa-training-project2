@@ -6,7 +6,7 @@ import AuthForm from "../../components/AuthForm";
 import { useDispatch } from "react-redux";
 import { signInAction } from "../../app/userSlice";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { Loading } from "../../utils/Loading";
+
 import waiting from "../../utils/waiting";
 import styles from "./style.module.css";
 
@@ -14,6 +14,7 @@ export default function SignIn() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+
   const handleSubmit = (
     e,
     username,

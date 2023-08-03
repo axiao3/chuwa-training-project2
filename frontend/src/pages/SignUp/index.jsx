@@ -6,7 +6,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import AuthForm from "../../components/AuthForm";
 import { signUpAction } from "../../app/userSlice";
 import { isTokenValid } from "../../services/auth";
-import { Loading } from "../../utils/Loading";
+import Loading from "../../utils/Loading";
 import waiting from "../../utils/waiting";
 import style from "./style.module.css";
 
@@ -73,7 +73,9 @@ export default function SignUp({ token }) {
           </p>
         </div>
       ) : (
-        <p>{tokenError}</p>
+        <div className={style.container}>
+          <p>{tokenError}</p>
+        </div>
       )}
     </>
   );

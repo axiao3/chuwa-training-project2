@@ -8,24 +8,26 @@ import {
 } from "../../app/applicationSlice";
 import InfoSection from "../../components/InfoSection";
 import InfoSectionForDocuments from "../../components/InfoSection/InfoSectionForDocuments";
+import Loading from "../../utils/Loading";
 
 export default function PersonalInformation() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
   const { user, isAuthenticated } = useSelector((state) => state.user);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/signin", { state: { from: `/employees/${id}` } });
     } else {
       if (user.type === "manager") {
-        dispatch(getApplicationByIdAction({ id }));
+        dispatch(getApplicationByIdAction({ id })).then(setIsLoading(false));
       } else {
         if (user.applicationStatus !== "approved") {
           window.location.href = `/${id}/application`;
         } else {
-          dispatch(getApplicationByIdAction({ id }));
+          dispatch(getApplicationByIdAction({ id })).then(setIsLoading(false));
         }
       }
     }
@@ -40,6 +42,7 @@ export default function PersonalInformation() {
     changes.submittedStatus = "approved";
     console.log("changes:", changes);
     dispatch(updateApplicationAction(changes)).then((action) => {
+      setIsLoading(false);
       if (updateApplicationAction.fulfilled.match(action)) {
         // window.location.href = `/employees/${id}`;
         // window.location.reload();
@@ -62,6 +65,7 @@ export default function PersonalInformation() {
       submittedStatus: "approved",
     };
     dispatch(updateApplicationAction(updatedData)).then((action) => {
+      setIsLoading(false);
       if (updateApplicationAction.fulfilled.match(action)) {
         // window.location.href = `/employees/${id}`;
         // window.location.reload();
@@ -130,7 +134,7 @@ export default function PersonalInformation() {
 
   return (
     application && (
-      <div style={{ minHeight: "100vh" }}>
+      <div>
         <InfoSection
           usertype={user.type}
           title="Name"
